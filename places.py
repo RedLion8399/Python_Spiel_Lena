@@ -2,14 +2,14 @@ from random import randint
 
 # create blank list with 80 items
 
-Desc = list(range(81))
-Objects = list(range(81))
-North = list(range(81))
-South = list(range(81))
-East = list(range(81))
-West = list(range(81))
-Down = list(range(81))
-Up = list(range(81))
+Desc: list[str] = []
+Objects: list[int] = []
+North: list[int] = []
+South: list[int] = []
+East: list[int] = []
+West: list[int] = []
+Down: list[int] = []
+Up: list[int] = []
 
 Desc[1] = "Paddington Station"
 Objects[1] = randint(1,6)
