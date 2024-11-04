@@ -1,8 +1,9 @@
 # Title: Adventure Game
-# Version: 1.5
-# Date: October 15, 2024 - October xx, 2024
+# Version: 1.5.1
+# Date: October 15, 2024 - November xx, 2024
 # 
 # Author: Lena Weinstock
+# Linter: Paul Jonas Dohle
 # Course: Computer Science ICS 3u
 # School: Glebe Collegiate Institute, Ottawa
 # Teacher: Mr Giassante
@@ -14,8 +15,8 @@
 #               "passes" the player needs to find. After two travels, the pass
 #               is not valid anymore and the player needs to switch it with a
 #               new one.
-#               
-import random
+
+
 from random import randint
 
 # create blank list with 80 items
@@ -30,7 +31,7 @@ Down = list(range(81))
 Up = list(range(81))
 
 Desc[1] = "Paddington Station"
-Objects[1] = random.randint(1,6)
+Objects[1] = randint(1,6)
 North[1] = 0
 South[1] = 0 
 East[1] = 0
@@ -39,7 +40,7 @@ Down[1] = 71
 Up[1] = 0
 
 Desc[2] = "Regent's Park"
-Objects[2] = random.randint(1,6)
+Objects[2] = randint(1,6)
 North[2] = 0
 South[2] = 0 
 East[2] = 3
@@ -48,7 +49,7 @@ Down[2] = 0
 Up[2] = 0
 
 Desc[3] = "Regent's Park"
-Objects[3] = random.randint(1,6) 
+Objects[3] = randint(1,6) 
 North[3] = 0
 South[3] = 13 
 East[3] = 0
@@ -57,7 +58,7 @@ Down[3] = 0
 Up[3] = 0
 
 Desc[4] = "Gower Street"
-Objects[4] = random.randint(1,6)
+Objects[4] = randint(1,6)
 North[4] = 0
 South[4] = 14 
 East[4] = 5
@@ -66,7 +67,7 @@ Down[4] = 0
 Up[4] = 0
 
 Desc[5] = "Euston Road"
-Objects[5] = random.randint(1,6) 
+Objects[5] = randint(1,6) 
 North[5] = 0
 South[5] = 0 
 East[5] = 6
@@ -75,7 +76,7 @@ Down[5] = 0
 Up[5] = 0
 
 Desc[6] = "King's Cross Station"
-Objects[6] = random.randint(1,6)
+Objects[6] = randint(1,6)
 North[6] = 0
 South[6] = 0 
 East[6] = 0
@@ -84,7 +85,7 @@ Down[6] = 72
 Up[6] = 0
 
 Desc[7] = "Prime Meridian"
-Objects[7] = random.randint(1,6) 
+Objects[7] = randint(1,6) 
 North[7] = 0
 South[7] = 0 
 East[7] = 8
@@ -93,7 +94,7 @@ Down[7] = 0
 Up[7] = 0
 
 Desc[8] = "Royal Observatorium"
-Objects[8] = random.randint(1,6) 
+Objects[8] = randint(1,6) 
 North[8] = 0
 South[8] = 0 
 East[8] = 9
@@ -102,7 +103,7 @@ Down[8] = 0
 Up[8] = 0
 
 Desc[9] = "Greenwhich Park"
-Objects[9] = random.randint(1,6) 
+Objects[9] = randint(1,6) 
 North[9] = 0
 South[9] = 19 
 East[9] = 10
@@ -111,7 +112,7 @@ Down[9] = 0
 Up[9] = 0
 
 Desc[10] = "Greenwhich Park"
-Objects[10] = random.randint(1,6) 
+Objects[10] = randint(1,6) 
 North[10] = 0
 South[10] = 0 
 East[10] = 0
@@ -120,7 +121,7 @@ Down[10] = 0
 Up[10] = 0
 
 Desc[11] = "Hyde Park"
-Objects[11] = random.randint(1,6) 
+Objects[11] = randint(1,6) 
 North[11] = 0
 South[11] = 21 
 East[11] = 12
@@ -129,7 +130,7 @@ Down[11] = 0
 Up[11] = 0
 
 Desc[12] = "Brook Street"
-Objects[12] = random.randint(1,6) 
+Objects[12] = randint(1,6) 
 North[12] = 0
 South[12] = 22
 East[12] = 13
@@ -138,7 +139,7 @@ Down[12] = 0
 Up[12] = 0
 
 Desc[13] = "Regent Street"
-Objects[13] = random.randint(1,6)
+Objects[13] = randint(1,6)
 North[13] = 3
 South[13] = 23 
 East[13] = 0
@@ -147,7 +148,7 @@ Down[13] = 0
 Up[13] = 0
 
 Desc[14] = "British Museum"
-Objects[14] = random.randint(1,6) 
+Objects[14] = randint(1,6) 
 North[14] = 4
 South[14] = 24 
 East[14] = 0
@@ -156,7 +157,7 @@ Down[14] = 0
 Up[14] = 0
 
 Desc[15] = "Queen Victoria Street"
-Objects[15] = random.randint(1,6) 
+Objects[15] = randint(1,6) 
 North[15] = 0
 South[15] = 25 
 East[15] = 16
@@ -165,7 +166,7 @@ Down[15] = 0
 Up[15] = 0
 
 Desc[16] = "King William Street"
-Objects[16] = random.randint(1,6) 
+Objects[16] = randint(1,6) 
 North[16] = 0
 South[16] = 0 
 East[16] = 17
@@ -174,7 +175,7 @@ Down[16] = 0
 Up[16] = 0
 
 Desc[17] = "Tower Hill Station"
-Objects[17] = random.randint(1,6) 
+Objects[17] = randint(1,6) 
 North[17] = 0
 South[17] = 27 
 East[17] = 0
@@ -183,7 +184,7 @@ Down[17] = 73
 Up[17] = 0
 
 Desc[18] = "National Maritim Museum"
-Objects[18] = random.randint(1,6) 
+Objects[18] = randint(1,6) 
 North[18] = 0
 South[18] = 0 
 East[18] = 19
@@ -192,7 +193,7 @@ Down[18] = 0
 Up[18] = 0
 
 Desc[19] = "King William Walk"
-Objects[19] = random.randint(1,6) 
+Objects[19] = randint(1,6) 
 North[19] = 9
 South[19] = 29 
 East[19] = 20
@@ -201,7 +202,7 @@ Down[19] = 0
 Up[19] = 0
 
 Desc[20] = "Greenwhich Market"
-Objects[20] = random.randint(1,6) 
+Objects[20] = randint(1,6) 
 North[20] = 0
 South[20] = 0 
 East[20] = 0
@@ -210,7 +211,7 @@ Down[20] = 0
 Up[20] = 0
 
 Desc[21] = "Hyde Park Corner (Station)"
-Objects[21] = random.randint(1,6)
+Objects[21] = randint(1,6)
 North[21] = 11
 South[21] = 31 
 East[21] = 22
@@ -219,7 +220,7 @@ Down[21] = 74
 Up[21] = 0
 
 Desc[22] = "Picadilly Street"
-Objects[22] = random.randint(1,6)
+Objects[22] = randint(1,6)
 North[22] = 12
 South[22] = 32 
 East[22] = 23
@@ -228,7 +229,7 @@ Down[22] = 0
 Up[22] = 0
 
 Desc[23] = "Picadilly Circus Station"
-Objects[23] = random.randint(1,6)
+Objects[23] = randint(1,6)
 North[23] = 13
 South[23] = 0 
 East[23] = 24
@@ -237,7 +238,7 @@ Down[23] = 75
 Up[23] = 0
 
 Desc[24] = "Shaftesbury Avenue"
-Objects[24] = random.randint(1,6)
+Objects[24] = randint(1,6)
 North[24] = 14
 South[24] = 0 
 East[24] = 0
@@ -246,7 +247,7 @@ Down[24] = 0
 Up[24] = 0
 
 Desc[25] = "White Lion Hill"
-Objects[25] = random.randint(1,6) 
+Objects[25] = randint(1,6) 
 North[25] = 15
 South[25] = 0 
 East[25] = 26
@@ -255,7 +256,7 @@ Down[25] = 0
 Up[25] = 0
 
 Desc[26] = "Upper Thames Street"
-Objects[26] = random.randint(1,6) 
+Objects[26] = randint(1,6) 
 North[26] = 0
 South[26] = 0 
 East[26] = 27
@@ -264,7 +265,7 @@ Down[26] = 0
 Up[26] = 0
 
 Desc[27] = "Lower Thames Street"
-Objects[27] = random.randint(1,6) 
+Objects[27] = randint(1,6) 
 North[27] = 17
 South[27] = 0 
 East[27] = 28
@@ -273,7 +274,7 @@ Down[27] = 0
 Up[27] = 0
 
 Desc[28] = "Tower of London"
-Objects[28] = random.randint(1,6) 
+Objects[28] = randint(1,6) 
 North[28] = 0
 South[28] = 38 
 East[28] = 0
@@ -282,7 +283,7 @@ Down[28] = 0
 Up[28] = 0
 
 Desc[29] = "Greenwhich Pier"
-Objects[29] = random.randint(1,6)
+Objects[29] = randint(1,6)
 North[29] = 19
 South[29] = 50 
 East[29] = 30
@@ -291,7 +292,7 @@ Down[29] = 0
 Up[29] = 0
 
 Desc[30] = "Cutty Sark"
-Objects[30] = random.randint(1,6)
+Objects[30] = randint(1,6)
 North[30] = 0
 South[30] = 0 
 East[30] = 0
@@ -300,7 +301,7 @@ Down[30] = 0
 Up[30] = 0
 
 Desc[31] = "Constitution Hill (Street)"
-Objects[31] = random.randint(1,6)
+Objects[31] = randint(1,6)
 North[31] = 21
 South[31] = 41
 East[31] = 0
@@ -309,7 +310,7 @@ Down[31] = 0
 Up[31] = 0
 
 Desc[32] = "St. James Park"
-Objects[32] = random.randint(1,6)
+Objects[32] = randint(1,6)
 North[32] = 22
 South[32] = 42
 East[32] = 0
@@ -318,7 +319,7 @@ Down[32] = 0
 Up[32] = 0
 
 Desc[33] = "White Hall (Street)"
-Objects[33] = random.randint(1,6)
+Objects[33] = randint(1,6)
 North[33] = 0
 South[33] = 43
 East[33] = 0
@@ -363,7 +364,7 @@ Down[37] = 0
 Up[37] = 0
 
 Desc[38] = "Tower Bridge"
-Objects[38] = random.randint(1,6)
+Objects[38] = randint(1,6)
 North[38] = 28
 South[38] = 48 
 East[38] = 0
@@ -390,7 +391,7 @@ Down[40] = 0
 Up[40] = 0
 
 Desc[41] = "Buckingham Palace"
-Objects[41] = random.randint(1,6)
+Objects[41] = randint(1,6)
 North[41] = 31
 South[41] = 51 
 East[41] = 42
@@ -399,7 +400,7 @@ Down[41] = 0
 Up[41] = 0
 
 Desc[42] = "Birdcage Walk"
-Objects[42] = random.randint(1,6)
+Objects[42] = randint(1,6)
 North[42] = 32
 South[42] = 52 
 East[42] = 43
@@ -408,7 +409,7 @@ Down[42] = 0
 Up[42] = 0
 
 Desc[43] = "Palace of Westminister"
-Objects[43] = random.randint(1,6) 
+Objects[43] = randint(1,6) 
 North[43] = 33
 South[43] = 53 
 East[43] = 44
@@ -417,7 +418,7 @@ Down[43] = 0
 Up[43] = 0
 
 Desc[44] = "Westminister Bridge"
-Objects[44] = random.randint(1,6)
+Objects[44] = randint(1,6)
 North[44] = 0
 South[44] = 0 
 East[44] = 45
@@ -426,7 +427,7 @@ Down[44] = 0
 Up[44] = 0
 
 Desc[45] = "London Eye"
-Objects[45] = random.randint(1,6)
+Objects[45] = randint(1,6)
 North[45] = 0
 South[45] = 55 
 East[45] = 46
@@ -435,7 +436,7 @@ Down[45] = 0
 Up[45] = 0
 
 Desc[46] = "Waterloo Road"
-Objects[46] = random.randint(1,6)
+Objects[46] = randint(1,6)
 North[46] = 0
 South[46] = 56 
 East[46] = 0
@@ -444,7 +445,7 @@ Down[46] = 0
 Up[46] = 0
 
 Desc[47] = "Tooley Street"
-Objects[47] = random.randint(1,6)
+Objects[47] = randint(1,6)
 North[47] = 0
 South[47] = 57 
 East[47] = 48
@@ -453,7 +454,7 @@ Down[47] = 0
 Up[47] = 0
 
 Desc[48] = "Tower Bridge Road"
-Objects[48] = random.randint(1,6)
+Objects[48] = randint(1,6)
 North[48] = 38
 South[48] = 58 
 East[48] = 49
@@ -462,7 +463,7 @@ Down[48] = 0
 Up[48] = 0
 
 Desc[49] = "Tooley Street"
-Objects[49] = random.randint(1,6)
+Objects[49] = randint(1,6)
 North[49] = 0
 South[49] = 0 
 East[49] = 0
@@ -471,7 +472,7 @@ Down[49] = 0
 Up[49] = 0
 
 Desc[50] = "City Cruises London Office"
-Objects[50] = random.randint(1,6)
+Objects[50] = randint(1,6)
 North[50] = 29
 South[50] = 60 
 East[50] = 0
@@ -480,7 +481,7 @@ Down[50] = 0
 Up[50] = 0
 
 Desc[51] = "Buckingham Gate"
-Objects[51] = random.randint(1,6)
+Objects[51] = randint(1,6)
 North[51] = 41
 South[51] = 61 
 East[51] = 52
@@ -489,7 +490,7 @@ Down[51] = 0
 Up[51] = 0
 
 Desc[52] = "St. James Park Station"
-Objects[52] = random.randint(1,6)
+Objects[52] = randint(1,6)
 North[52] = 42
 South[52] = 0 
 East[52] = 53
@@ -498,7 +499,7 @@ Down[52] = 76
 Up[52] = 0
 
 Desc[53] = "Tothill Street"
-Objects[53] = random.randint(1,6)
+Objects[53] = randint(1,6)
 North[53] = 43
 South[53] = 0 
 East[53] = 0
@@ -507,7 +508,7 @@ Down[53] = 0
 Up[53] = 0
 
 Desc[54] = "River"
-Objects[54] = random.randint(1,6)
+Objects[54] = randint(1,6)
 North[54] = 0
 South[54] = 0 
 East[54] = 0
@@ -516,7 +517,7 @@ Down[54] = 0
 Up[54] = 0
 
 Desc[55] = "Westminister Bridge Road "
-Objects[55] = random.randint(1,6)
+Objects[55] = randint(1,6)
 North[55] = 45
 South[55] = 65 
 East[55] = 0
@@ -525,7 +526,7 @@ Down[55] = 0
 Up[55] = 0
 
 Desc[56] = "London Road"
-Objects[56] = random.randint(1,6)
+Objects[56] = randint(1,6)
 North[56] = 46
 South[56] = 66
 East[56] = 0
@@ -534,7 +535,7 @@ Down[56] = 0
 Up[56] = 0
 
 Desc[57] = "Abbey Street"
-Objects[57] = random.randint(1,6)
+Objects[57] = randint(1,6)
 North[57] = 47
 South[57] = 0 
 East[57] = 58
@@ -543,7 +544,7 @@ Down[57] = 0
 Up[57] = 0
 
 Desc[58] = "Tower Bridge Road"
-Objects[58] = random.randint(1,6)
+Objects[58] = randint(1,6)
 North[58] = 48
 South[58] = 68 
 East[58] = 59
@@ -552,7 +553,7 @@ Down[58] = 0
 Up[58] = 0
 
 Desc[59] = "Abbey Street"
-Objects[59] = random.randint(1,6)
+Objects[59] = randint(1,6)
 North[59] = 0
 South[59] = 0 
 East[59] = 60
@@ -561,7 +562,7 @@ Down[59] = 0
 Up[59] = 0
 
 Desc[60] = "Abbey Street"
-Objects[60] = random.randint(1,6)
+Objects[60] = randint(1,6)
 North[60] = 50
 South[60] = 0 
 East[60] = 0
@@ -570,7 +571,7 @@ Down[60] = 0
 Up[60] = 0
 
 Desc[61] = "Victoria Street"
-Objects[61] = random.randint(1,6)
+Objects[61] = randint(1,6)
 North[61] = 51
 South[61] = 0 
 East[61] = 62
@@ -579,7 +580,7 @@ Down[61] = 0
 Up[61] = 0
 
 Desc[62] = "Victoria Street"
-Objects[62] = random.randint(1,6)
+Objects[62] = randint(1,6)
 North[62] = 0
 South[62] = 0 
 East[62] = 63
@@ -588,7 +589,7 @@ Down[62] = 0
 Up[62] = 0
 
 Desc[63] = "Victoria Street"
-Objects[63] = random.randint(1,6)
+Objects[63] = randint(1,6)
 North[63] = 43
 South[63] = 0 
 East[63] = 0
@@ -606,7 +607,7 @@ Down[64] = 0
 Up[64] = 0
 
 Desc[65] = "Kennington Road"
-Objects[65] = random.randint(1,6)
+Objects[65] = randint(1,6)
 North[65] = 55
 South[65] = 0 
 East[65] = 66
@@ -615,7 +616,7 @@ Down[65] = 0
 Up[65] = 0
 
 Desc[66] = "Kennington Station"
-Objects[66] = random.randint(1,6)
+Objects[66] = randint(1,6)
 North[66] = 56
 South[66] = 0 
 East[66] = 67
@@ -624,7 +625,7 @@ Down[66] = 77
 Up[66] = 0
 
 Desc[67] = "New Kent Road"
-Objects[67] = random.randint(1,6) 
+Objects[67] = randint(1,6) 
 North[67] = 0
 South[67] = 0 
 East[67] = 68
@@ -633,7 +634,7 @@ Down[67] = 0
 Up[67] = 0
 
 Desc[68] = "Tower Bridge Road"
-Objects[68] = random.randint(1,6) 
+Objects[68] = randint(1,6) 
 North[68] = 58
 South[68] = 0 
 East[68] = 69
@@ -642,7 +643,7 @@ Down[68] = 0
 Up[68] = 0
 
 Desc[69] = "New Cross Road"
-Objects[69] = random.randint(1,6)
+Objects[69] = randint(1,6)
 North[69] = 0
 South[69] = 0 
 East[69] = 70
@@ -651,7 +652,7 @@ Down[69] = 0
 Up[69] = 0
 
 Desc[70] = "New Cross Road"
-Objects[70] = random.randint(1,6)
+Objects[70] = randint(1,6)
 North[70] = 0
 South[70] = 80 
 East[70] = 0
@@ -732,7 +733,7 @@ Down[78] = 0
 Up[78] = 79
 
 Desc[79] = "Elefant & Castle Station"
-Objects[79] = random.randint(1,6)
+Objects[79] = randint(1,6)
 North[79] = 0
 South[79] = 0 
 East[79] = 80
@@ -741,7 +742,7 @@ Down[79] = 78
 Up[79] = 0
 
 Desc[80] = "Old Kent Road"
-Objects[80] = random.randint(1,6)
+Objects[80] = randint(1,6)
 North[80] = 70
 South[80] = 0 
 East[80] = 0
@@ -754,17 +755,17 @@ Up[80] = 0
 
 position = 0 # position at beginning
 while position == 0 or position == 1 or position == 7 or position == 8 or position == 9 or position == 10 or position == 18 or position == 19 or position == 20 or position == 29 or position == 30 or position == 34 or position == 35 or position == 36 or position == 37 or position == 38 or position == 39 or position == 40 or position == 54 or position == 64 or position == 71 or position == 72 or position == 73 or position == 74 or position == 75 or position == 76 or position == 77 or position == 78:
-    position = random.randint(1,81)
+    position = randint(1,81)
 
 
 pos_com = 0 # position of computer
 
 while pos_com == 0 or pos_com == position or pos_com == 34 or pos_com == 35 or pos_com == 36 or pos_com == 37 or pos_com == 38 or pos_com == 39 or pos_com == 40 or pos_com == 54 or pos_com == 64 or pos_com == 71 or pos_com == 72 or pos_com == 73 or pos_com == 74 or pos_com == 75 or pos_com == 76 or pos_com == 77 or pos_com == 78:
-    pos_com = random.randint(1,81)
+    pos_com = randint(1,81)
     while pos_com + 2 == position or pos_com - 2 == position:
-        pos_com = random.randint(1,81)
+        pos_com = randint(1,81)
     while pos_com + 20 == position or pos_com -20 == position:
-        pos_com = random.randint(1,81)
+        pos_com = randint(1,81)
 
 # defining some variables for later
 quitting = False
@@ -917,7 +918,7 @@ while quitting == False:
 
         if Objects[position] == 5:
             str(Objects[position])
-            boat_or_train = random.randint(1,4)
+            boat_or_train = randint(1,4)
             if boat_or_train == 1:
                 Objects[position] = "boat-ticket"
             else:
@@ -1136,7 +1137,7 @@ while quitting == False:
 
 
         if moves == 3:
-            pos_com_random = random.randint(1,5)
+            pos_com_random = randint(1,5)
             if pos_com_random == 1 and West[pos_com] != 0:
                 pos_com -= 1
                 moves = 0
