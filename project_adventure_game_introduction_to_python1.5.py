@@ -185,10 +185,10 @@ while not quitting:
 
 
         # Choice after information
-        command = input("select a command out of the list above: ")
+        command = input("select a command out of the list above: ").upper()
         print()
 
-        ### Validity boat tickets
+        # Validity boat tickets
 
 
         if inhand == "Used_once_boat-ticket":
