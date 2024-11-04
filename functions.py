@@ -14,3 +14,17 @@ def greeting() -> None:
     print("but be careful! The tickets are only valid two times.")
     print("Have fun!")
 
+def command_help() -> None:
+        print(" ")
+        print(" ")
+        print("[N] to go north")
+        print("[S] to go south")
+        print("[W] to go west")
+        print("[E] to go est")
+        print("[U] to go up(underground)")
+        print("[D] to go down(underground)")
+        print("[X] to drop the item in that place (You will not find it there again)")
+        print("[P] to pick up the item in that place")
+        print("[K] to switch the item you have with the item in that place")
+        print("[Q] to quit the game")
+        print(" ")
