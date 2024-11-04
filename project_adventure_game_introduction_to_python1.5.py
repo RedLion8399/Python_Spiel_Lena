@@ -25,12 +25,12 @@ from functions import greeting, command_help
 # setting beginning variables of player and computer
 
 # Selecting a random point to start with excluding those, who can only reached by underground
-player_position = 0  # position at beginning
+player_position: int = 0  # position at beginning
 while player_position == 0 or player_position == 1 or player_position == 7 or player_position == 8 or player_position == 9 or player_position == 10 or player_position == 18 or player_position == 19 or player_position == 20 or player_position == 29 or player_position == 30 or player_position == 34 or player_position == 35 or player_position == 36 or player_position == 37 or player_position == 38 or player_position == 39 or player_position == 40 or player_position == 54 or player_position == 64 or player_position == 71 or player_position == 72 or player_position == 73 or player_position == 74 or player_position == 75 or player_position == 76 or player_position == 77 or player_position == 78:
     player_position = randint(1,81)
 
 
-thief_position = 0
+thief_position: int = 0
 
 while thief_position == 0 or thief_position == player_position or thief_position == 34 or thief_position == 35 or thief_position == 36 or thief_position == 37 or thief_position == 38 or thief_position == 39 or thief_position == 40 or thief_position == 54 or thief_position == 64 or thief_position == 71 or thief_position == 72 or thief_position == 73 or thief_position == 74 or thief_position == 75 or thief_position == 76 or thief_position == 77 or thief_position == 78:
     thief_position = randint(1,81)
@@ -40,12 +40,12 @@ while thief_position == 0 or thief_position == player_position or thief_position
         thief_position = randint(1,81)
 
 # defining some variables for later
-quitting = False
-command = " "
-boat_or_train = 0
-inhand = " "
-transition = " "
-moves = 0
+quitting: bool = False
+command: str = " "
+boat_or_train: int = 0
+inhand: str = " "
+transition: str     # Only used once TODO maybe there's an alternative
+moves: int = 0
 
 greeting()
 
@@ -151,7 +151,6 @@ while not quitting:
             print()
 
         # random object
-
         if Objects[player_position] == 5:
             str(Objects[player_position])
             boat_or_train = randint(1,4)
@@ -167,29 +166,24 @@ while not quitting:
         # inventary
         if inhand == " ":
             print("You have currently nothing in your hand.")
-            print()
-            print()
         else:
             print(f"You are currently in possession of a/an {inhand}.")
-            print()
-            print()
+        print()
+        print()
 
         # Objects
-
         if Objects[player_position] == ("underground-ticket" or Objects[player_position] == "boat-ticket") and inhand == " ":
             print(f"You can pick-up the: {Objects[player_position]}.")
-            print()
         elif Objects[player_position] == ("underground-ticket" or Objects[player_position] == "boat-ticket") and inhand != " ":
             print(f"You can switch the: {inhand} with a/an {Objects[player_position]}.")
-            print()
+        print()
 
 
-        # Choice after information
+        # Asking user to input a command
         command = input("select a command out of the list above: ").upper()
         print()
 
         # Validity boat tickets
-
 
         if inhand == "Used_once_boat-ticket":
             if player_position == 29 and command != "S":
@@ -214,7 +208,7 @@ while not quitting:
         
 
         # atempt nr. 3 validity of tickets
-            
+        
         if inhand == "Used_once_underground-ticket":
             if player_position == 71 and (command == "N" or command == "S" or command == "E"):
                 inhand = " "
@@ -252,7 +246,6 @@ while not quitting:
                 inhand = "Used_once_underground-ticket"
             
             
-
         # What happens with selected command:
 
         if command == "N" and North[player_position]:
@@ -300,70 +293,48 @@ while not quitting:
             print(f"This command is not possible in/on/at {Desc[player_position]}. Please try again")
 
 
-
-        
-
         # fix problem with free rides underground and boat
-
+        print()
         if player_position == 71 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket":
-            print()
             print("You cannot take the underground without a valid ticket.")
             print("Please try again.")
-            print()
             player_position = 1
         elif player_position == 72 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket":
-            print()
             print("You cannot take the underground without a valid ticket.")
             print("Please try again.")
-            print()
             player_position = 6
         elif player_position == 73 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket":
-            print()
             print("You cannot take the underground without a valid ticket.")
             print("Please try again.")
-            print()
             player_position = 17
         elif player_position == 74 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket":
-            print()
             print("You cannot take the underground without a valid ticket.")
             print("Please try again.")
-            print()
             player_position = 21
         elif player_position == 75 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket":
-            print()
             print("You cannot take the underground without a valid ticket.")
             print("Please try again.")
-            print()
             player_position = 23
         elif player_position == 76 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket":
-            print()
             print("You cannot take the underground without a valid ticket.")
             print("Please try again.")
-            print()
             player_position = 52
         elif player_position == 77 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket":
-            print()
             print("You cannot take the underground without a valid ticket.")
             print("Please try again.")
-            print()
             player_position = 66
         elif player_position == 78 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket":
-            print()
             print("You cannot take the underground without a valid ticket.")
             print("Please try again.")
-            print()
             player_position = 79
         elif player_position == 50 and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket":
-            print()
             print("You cannot take the boat without a valid ticket.")
             print("Please try again.")
-            print()
         elif player_position == 29 and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket":
-            print()
             print("You cannot take the boat without a valid ticket.")
             print("Please try again.")
-            print()
-            
+        print()
+        
         
         # thief position(pos_com)
         moves += 1
