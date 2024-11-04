@@ -18,7 +18,7 @@
 
 
 from random import randint
-
+from places import Desc, Objects, North, South, East, West, Up, Down
 
 # setting beginning variables of payer and computer
 
