@@ -19,7 +19,7 @@
 
 from random import randint
 from places import Desc, Objects, North, South, East, West, Up, Down
-from functions import greeting
+from functions import greeting, command_help
 
 # setting beginning variables of payer and computer
 
@@ -50,19 +50,7 @@ greeting()
 
 while not quitting:
     while command != "N" and command != "S" and command != "W" and command != "E" and command != "U" and command != "D" and command != "X" and command != "P" and command != "K" and command != "Q" :     
-        print(" ")
-        print(" ")
-        print("[N] to go north")
-        print("[S] to go south")
-        print("[W] to go west")
-        print("[E] to go est")
-        print("[U] to go up(underground)")
-        print("[D] to go down(underground)")
-        print("[X] to drop the item in that place (You will not find it there again)")
-        print("[P] to pick up the item in that place")
-        print("[K] to switch the item you have with the item in that place")
-        print("[Q] to quit the game")
-        print(" ")
+        command_help()
 
         # where am I + thief
         print(" ")
@@ -73,25 +61,25 @@ while not quitting:
 
         # position directions and options
 
-        if North[position] != 0:
+        if North[position]:
             print(f"You can go North to {Desc[North[position]]}.")
             print(" ")
         else:
             print("You cannot go North.")
             print(" ")
-        if South[position] != 0:
+        if South[position]:
             print(f"You can go South to {Desc[South[position]]}.")
             print(" ")
         else:
             print("You cannot go South.")
             print(" ")
-        if East[position] != 0:
+        if East[position]:
             print(f"You can go East to {Desc[East[position]]}.")
             print(" ")
         else:
             print("You cannot go East.")
             print(" ")
-        if West[position] != 0:
+        if West[position]:
             print(f"You can go West to {Desc[West[position]]}.")
             print(" ")
             print(" ")
@@ -99,7 +87,7 @@ while not quitting:
             print("You cannot go West.")
             print(" ")
             print(" ")
-        if Down[position] != 0:
+        if Down[position]:
             print(f"You can go down to {Desc[Down[position]]}.")
             print(" ")
             print(" ")
@@ -107,7 +95,7 @@ while not quitting:
             print("There is no (other) underground station here.")
             print(" ")
             
-        if Up[position] != 0:
+        if Up[position]:
             print(f"You can go up to {Desc[Up[position]]}.")
             print(" ")
             print(" ")
@@ -274,22 +262,22 @@ while not quitting:
 
         # What happens with selected command:
 
-        if command == "N" and North[position] != 0:
+        if command == "N" and North[position]:
             position = North[position]
 
-        elif command == "S" and South[position] != 0:
+        elif command == "S" and South[position]:
             position = South[position]
 
-        elif command == "W" and West[position] != 0:
+        elif command == "W" and West[position]:
             position = West[position]
 
-        elif command == "E" and East[position] != 0:
+        elif command == "E" and East[position]:
             position = East[position]
 
-        elif command == "U" and Up[position] != 0:
+        elif command == "U" and Up[position]:
             position = Up[position]
 
-        elif command == "D" and Down[position] != 0:
+        elif command == "D" and Down[position]:
             position = Down[position]
 
         elif command == "X" and inhand != " " and Objects[position] == " ":
