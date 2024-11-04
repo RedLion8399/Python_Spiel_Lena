@@ -22,7 +22,8 @@ from places import Desc, Objects, North, South, East, West, Up, Down
 
 # setting beginning variables of payer and computer
 
-position = 0 # position at beginning
+# Selecting a random point to start with excluding those, 
+position = 0  # position at beginning
 while position == 0 or position == 1 or position == 7 or position == 8 or position == 9 or position == 10 or position == 18 or position == 19 or position == 20 or position == 29 or position == 30 or position == 34 or position == 35 or position == 36 or position == 37 or position == 38 or position == 39 or position == 40 or position == 54 or position == 64 or position == 71 or position == 72 or position == 73 or position == 74 or position == 75 or position == 76 or position == 77 or position == 78:
     position = randint(1,81)
 
@@ -33,7 +34,7 @@ while pos_com == 0 or pos_com == position or pos_com == 34 or pos_com == 35 or p
     pos_com = randint(1,81)
     while pos_com + 2 == position or pos_com - 2 == position:
         pos_com = randint(1,81)
-    while pos_com + 20 == position or pos_com -20 == position:
+    while pos_com + 20 == position or pos_com - 20 == position:
         pos_com = randint(1,81)
 
 # defining some variables for later
@@ -62,7 +63,7 @@ print("but be careful! The tickets are only valid two times.")
 print("Have fun!")
 
 
-while quitting == False:
+while not quitting:
     while command != "N" and command != "S" and command != "W" and command != "E" and command != "U" and command != "D" and command != "X" and command != "P" and command != "K" and command != "Q" :     
         print(" ")
         print(" ")
@@ -80,33 +81,33 @@ while quitting == False:
 
         # where am I + thief
         print(" ")
-        print("You are in/on/at " + Desc[position] + ".")
+        print(f"You are in/on/at {Desc[position]}.")
         print(" ")
-        print("The thief is in/on/at " + Desc[pos_com] + ".")
+        print(f"The thief is in/on/at {Desc[pos_com]}.")
         print(" ")
 
         # position directions and options
 
         if North[position] != 0:
-            print("You can go North to " + Desc[North[position]] + ".")
+            print(f"You can go North to {Desc[North[position]]}.")
             print(" ")
         else:
             print("You cannot go North.")
             print(" ")
         if South[position] != 0:
-            print("You can go South to " + Desc[South[position]] + ".")
+            print(f"You can go South to {Desc[South[position]]}.")
             print(" ")
         else:
             print("You cannot go South.")
             print(" ")
         if East[position] != 0:
-            print("You can go East to " + Desc[East[position]] + ".")
+            print(f"You can go East to {Desc[East[position]]}.")
             print(" ")
         else:
             print("You cannot go East.")
             print(" ")
         if West[position] != 0:
-            print("You can go West to " + Desc[West[position]] + ".")
+            print(f"You can go West to {Desc[West[position]]}.")
             print(" ")
             print(" ")
         else:
@@ -114,7 +115,7 @@ while quitting == False:
             print(" ")
             print(" ")
         if Down[position] != 0:
-            print("You can go down to " + Desc[Down[position]] + ".")
+            print(f"You can go down to {Desc[Down[position]]}.")
             print(" ")
             print(" ")
         else:
@@ -122,7 +123,7 @@ while quitting == False:
             print(" ")
             
         if Up[position] != 0:
-            print("You can go up to " + Desc[Up[position]] + ".")
+            print(f"You can go up to {Desc[Up[position]]}.")
             print(" ")
             print(" ")
         else:
@@ -203,17 +204,17 @@ while quitting == False:
             print(" ")
             print(" ")
         else:
-            print("You are currently in possession of a/an " + inhand + ".")
+            print(f"You are currently in possession of a/an {inhand}.")
             print(" ")
             print(" ")
 
         # Objects
 
         if Objects[position] == ("underground-ticket" or Objects[position] == "boat-ticket") and inhand == " ":
-            print("You can pick-up the: " + Objects[position] + " ")
+            print(f"You can pick-up the: {Objects[position]}.")
             print(" ")
         elif Objects[position] == ("underground-ticket" or Objects[position] == "boat-ticket") and inhand != " ":
-            print("You can switch the: " + inhand + " with a/an " + Objects[position] + ".")
+            print(f"You can switch the: {inhand} with a/an {Objects[position]}.")
             print(" ")
 
 
@@ -330,7 +331,7 @@ while quitting == False:
             print(" ")
             print(" ")
             print(" ")
-            print("This command is not possible in/on/at " + Desc[position] + "." + " Please try again")
+            print(f"This command is not possible in/on/at {Desc[position]}. Please try again")
 
 
 
@@ -434,6 +435,3 @@ while quitting == False:
                 break
             elif pos_com_random == 4 and South[pos_com] == 0:
                 break
-            
-        
-       
