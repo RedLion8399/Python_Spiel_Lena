@@ -3,7 +3,7 @@ from random import randint
 # create blank list with 80 items
 
 Desc: list[str] = [""] * 81
-Objects: list[int] = [0] * 81
+Objects: list[int | str] = [0] * 81
 North: list[int] = [0] * 81
 South: list[int] = [0] * 81
 East: list[int] = [0] * 81

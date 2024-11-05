@@ -43,23 +43,12 @@ while thief_position in [player_position, 0, 34, 35, 36, 37, 38, 39, 40, 54, 64,
 running: bool = True  # Variable is never changed TODO deleting the variable or giving a sence toi it
 command: str = " "
 boat_or_train: int = 0
-inhand: str = " "
-transition: str  # Only used once TODO maybe there's an alternative
+inhand: str | int = " "
+transition: str | int  # Only used once TODO maybe there's an alternative
 moves: int = 0
 
-greeting()
-
-while running:
-    command_help()
-
-    # Printing the position of the thief an the player
-    print()
-    print(f"You are in/on/at {Desc[player_position]}.")
-    print()
-    print(f"The thief is in/on/at {Desc[thief_position]}.")
-    print()
-
-    # position directions and options
+# Shows where the player can go from his current location
+def print_moving_opportunitys() -> None:
     if North[player_position]:
         print(f"You can go North to {Desc[North[player_position]]}.")
     else:
@@ -95,6 +84,62 @@ while running:
     else:
         print("You are currently not in an underground station.")
     print()
+
+def free_ticket_use_fix() -> None:
+    print()
+    if (player_position == 71 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+        print("You cannot take the underground without a valid ticket.")
+        print("Please try again.")
+        player_position = 1
+    elif (player_position == 72 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+        print("You cannot take the underground without a valid ticket.")
+        print("Please try again.")
+        player_position = 6
+    elif (player_position == 73 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+        print("You cannot take the underground without a valid ticket.")
+        print("Please try again.")
+        player_position = 17
+    elif (player_position == 74 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+        print("You cannot take the underground without a valid ticket.")
+        print("Please try again.")
+        player_position = 21
+    elif (player_position == 75 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+        print("You cannot take the underground without a valid ticket.")
+        print("Please try again.")
+        player_position = 23
+    elif (player_position == 76 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+        print("You cannot take the underground without a valid ticket.")
+        print("Please try again.")
+        player_position = 52
+    elif (player_position == 77 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+        print("You cannot take the underground without a valid ticket.")
+        print("Please try again.")
+        player_position = 66
+    elif (player_position == 78 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+        print("You cannot take the underground without a valid ticket.")
+        print("Please try again.")
+        player_position = 79
+    elif (player_position == 50 and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket"):
+        print("You cannot take the boat without a valid ticket.")
+        print("Please try again.")
+    elif (player_position == 29 and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket"):
+        print("You cannot take the boat without a valid ticket.")
+        print("Please try again.")
+    print()
+
+greeting()
+
+while running:
+    command_help()
+
+    # Printing the position of the thief an the player
+    print()
+    print(f"You are in/on/at {Desc[player_position]}.")
+    print()
+    print(f"The thief is in/on/at {Desc[thief_position]}.")
+    print()
+
+    print_moving_opportunitys()
 
     second_digit_com = 0
 
@@ -277,53 +322,10 @@ while running:
         print()
         print(f"This command is not possible in/on/at {Desc[player_position]}. Please try again")
 
-    # fix problem with free rides underground and boat
-    print()
-    if (player_position == 71 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 1
-    elif (player_position == 72 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 6
-    elif (player_position == 73 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 17
-    elif (player_position == 74 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 21
-    elif (player_position == 75 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 23
-    elif (player_position == 76 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 52
-    elif (player_position == 77 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 66
-    elif (player_position == 78 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 79
-    elif (player_position == 50 and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket"):
-        print("You cannot take the boat without a valid ticket.")
-        print("Please try again.")
-    elif (player_position == 29 and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket"):
-        print("You cannot take the boat without a valid ticket.")
-        print("Please try again.")
-    print()
+    free_ticket_use_fix()
 
     # thief position(pos_com)
     moves += 1
-
-    # emptying command for while loop
-    command = " "
 
     if moves == 3:
         pos_com_random = randint(1, 5)
