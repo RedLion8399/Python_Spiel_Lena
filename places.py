@@ -33,7 +33,7 @@ class Location:
         if randint(1,4) != 1:       # The conditional propability for a boat ticket if we've alredy got a ticket is 25%
             return 1                # The Total probability for an undergraund-ticket is about 16,6%
         else:                       #
-            return 2                #The total propability for a boat-ticket is about 4,16%s
+            return 2                # The total propability for a boat-ticket is about 4,16%s
 
     def __repr__(self) -> str:
         return self.name

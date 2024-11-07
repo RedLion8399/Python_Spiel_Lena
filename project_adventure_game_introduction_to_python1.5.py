@@ -1,5 +1,5 @@
 # Title: Adventure Game
-# Version: 1.5.1
+# Version: 1.6
 # Date: October 15, 2024 - November xx, 2024
 #
 # Author: Lena Weinstock
@@ -87,6 +87,7 @@ def print_moving_opportunitys() -> None:
     print()
 
 def free_ticket_use_fix() -> None:
+    global player_position, inhand
     print()
     if (player_position == 71 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
         print("You cannot take the underground without a valid ticket.")
