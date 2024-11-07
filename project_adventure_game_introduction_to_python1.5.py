@@ -27,17 +27,17 @@ from functions import greeting, command_help
 # Selecting a random point to start with excluding those, who can only reached by underground
 player_position: int = 0  # position at beginning
 while player_position in forbidden_player_starts:
-    player_position = randint(1, 81)
+    player_position = randint(1, 80)
 
 forbidden_thief_starts.append(player_position)
 thief_position: int = 0
 
 while thief_position in forbidden_thief_starts:
-    thief_position = randint(1, 81)
+    thief_position = randint(1, 80)
     while (thief_position + 2 == player_position or thief_position - 2 == player_position):
-        thief_position = randint(1, 81)
+        thief_position = randint(1, 80)
     while (thief_position + 20 == player_position or thief_position - 20 == player_position):
-        thief_position = randint(1, 81)
+        thief_position = randint(1, 80)
 
 # defining some variables for later
 running: bool = True  # Variable is never changed TODO deleting the variable or giving a sence to it

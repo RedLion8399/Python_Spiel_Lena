@@ -15,6 +15,8 @@ class Location:
 
         if objects:
             self.ticket_number:int = self._create_Ticket()
+        else:
+            self.ticket_number: int = 0
 
     def ticket(self) -> str:
         match self.ticket_number:
@@ -121,7 +123,7 @@ locations = [
     Location("Picadilly Circus Station (underground)", 75, False, north=71, south=78, east=72, west=74, up=52),
     Location("St. James Park Station (underground)", 76, False, north=72, east=73, up=52),
     Location("Kennington Station (underground)", 77, False, north=72, east=78, up=66),
-    Location("Elefant & Castle Station (underground)", 78, False, north=71, west=77, up=78),
+    Location("Elefant & Castle Station (underground)", 78, False, north=71, west=77, up=79),
     Location("Elefant & Castle Station", 79, east=80, down=78),
     Location("Old Kent Road", 80, north=70, west=79),
 ]
