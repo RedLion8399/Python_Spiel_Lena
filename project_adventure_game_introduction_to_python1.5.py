@@ -47,6 +47,7 @@ inhand: str | int = " "
 transition: str | int  # Only used once TODO maybe there's an alternative
 moves: int = 0
 second_digit_com: int
+new_move: bool = True  # Decides if stats are shown
 
 # Shows where the player can go from his current location
 def print_moving_opportunitys() -> None:
@@ -178,24 +179,143 @@ def print_relative_positions() -> None:
     print()
     print()
 
+def move_player(direction: str) -> None:
+    global locations, player_position
+
+    match direction:
+        case "NORTH":
+            if not locations[player_position].north:
+                print(f"At {locations[player_position]} you can not go north.")
+                return
+            player_position = locations[player_position].north
+
+        case "EAST":
+            if not locations[player_position].east:
+                print(f"At {locations[player_position]} you can not go east.")
+                return
+            player_position = locations[player_position].east
+
+        case "SOUTH":
+            if not locations[player_position].south:
+                print(f"At {locations[player_position]} you can not go south.")
+                return
+            player_position = locations[player_position].south
+
+        case "WEST":
+            if not locations[player_position].west:
+                print(f"At {locations[player_position]} you can not go west.")
+                return
+            player_position = locations[player_position].west
+
+        case "UP":
+            if not locations[player_position].up:
+                print(f"At {locations[player_position]} you can not go up.")
+                return
+            player_position = locations[player_position].up
+
+        case "DOWN":
+            if not locations[player_position].down:
+                print(f"At {locations[player_position]} you can not go down.")
+                return
+            player_position = locations[player_position].down
+
+        case _:
+            raise ValueError("Input unknown movement direction. Please reoprt this to the author.")
+
+def process_input() -> None:
+    global command, inhand, transition, new_move
+
+    match command:
+        case "N":
+            move_player("NORTH")
+
+        case "E":
+            move_player("EAST")
+
+        case "S":
+            move_player("SOUTH")
+
+        case "W":
+            move_player("WEST")
+
+        case "U":
+            move_player("UP")
+
+        case "D":
+            move_player("DOWN")
+
+        case "X":
+            if inhand == " ":
+                print("Yo have no item in your hand.")
+                return
+            if locations[player_position].ticket_number:
+                print("There is already a ticket on the ground.")
+                return
+            # TODO Make droping tickets possible. Now they are deleted.
+            inhand = " "
+        
+        case "P":
+            if inhand != " ":
+                print("Yo have already an item in your hand.")
+                return
+            if not locations[player_position].ticket_number:
+                print("There is no ticket on the ground.")
+                return
+            inhand = locations[player_position].ticket()
+            locations[player_position].ticket_number = 0
+
+        case "K":
+            if not locations[player_position].ticket_number:
+                print("There is no ticket on the ground.")
+                return
+            if inhand == " ":
+                print("Yo have no item in your hand.")
+                return
+            transition = inhand
+            inhand = locations[player_position].ticket()
+            # TODO Make swapping Tickets possible again. Now they are deleted.
+
+        case "Q":
+            print()
+            print("Good bye! I hope you had fun playing this game!")
+            print()
+            exit()
+        
+        case "H":
+            command_help()
+            return
+
+        case _:
+            print()
+            print()
+            print()
+            print()
+            print(f"This command is not possible in/on/at {locations[player_position]}. Please try again")
+            return
+        
+    new_move = True
+
 
 # The main programm starts here.
 # TODO Wrap this programm into a main function to set a main entrence point.
 greeting()
+command_help()
 
 while running:
-    command_help()
-    print_positions()
-    print_moving_opportunitys()
-    print_relative_positions()
+    # Show status
+    if new_move:
+        print_positions()
+        print_moving_opportunitys()
+        print_relative_positions()
 
-    # inventary
-    if inhand == " ":
-        print("You have currently nothing in your hand.")
-    else:
-        print(f"You are currently in possession of a/an {inhand}.")
-    print()
-    print()
+        # inventary
+        if inhand == " ":
+            print("You have currently nothing in your hand.")
+        else:
+            print(f"You are currently in possession of a/an {inhand}.")
+        print()
+        print()
+        new_move = False
 
     # Objects
     if ((locations[player_position].ticket_number == 1 or locations[player_position].ticket_number == 2) and inhand == " "):
@@ -203,6 +323,7 @@ while running:
     elif ((locations[player_position].ticket_number == 1 or locations[player_position].ticket_number == 2) and inhand != " "):
         print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket()}.")
     print()
+
 
     # Asking user to input a command
     command = input("select a command out of the list above: ").upper()
@@ -212,9 +333,9 @@ while running:
 
     if inhand == "Used_once_boat-ticket":
         if player_position == 29 and command != "S":
-            inhand = inhand
+            pass
         if player_position == 50 and command != "N":
-            inhand = inhand
+            pass
         if player_position == 50 and command == "N":
             inhand = " "
         elif player_position == 29 and command == "S":
@@ -222,9 +343,9 @@ while running:
 
     if inhand == "boat-ticket":
         if player_position == 29 and command != "S":
-            inhand = inhand
+            pass
         if player_position == 50 and command != "N":
-            inhand = inhand
+            pass
         elif player_position == 29 and command == "S":
             inhand = "Used_once_boat-ticket"
         elif player_position == 50 and command == "N":
@@ -268,53 +389,9 @@ while running:
         elif player_position == 78 and (command == "N" or command == "W"):
             inhand = "Used_once_underground-ticket"
 
-    # Reacting to a user input
-    if command == "N" and locations[player_position].north:
-        player_position = locations[player_position].north
 
-    elif command == "S" and locations[player_position].south:
-        player_position = locations[player_position].south
-
-    elif command == "W" and locations[player_position].west:
-        player_position = locations[player_position].west
-
-    elif command == "E" and locations[player_position].east:
-        player_position = locations[player_position].east
-
-    elif command == "U" and locations[player_position].up:
-        player_position = locations[player_position].up
-
-    elif command == "D" and locations[player_position].down:
-        player_position = locations[player_position].down
-
-    elif command == "X" and inhand != " " and not locations[player_position].ticket_number:
-        # TODO Make droping tickets possible. Now they are deleted.
-        inhand = " "
-
-    elif command == "P" and inhand == " " and locations[player_position].ticket() != " ":
-        inhand = locations[player_position].ticket()
-        locations[player_position].ticket_number = 0
-
-    elif command == "K" and inhand != " " and locations[player_position].ticket() != " ":
-        transition = inhand
-        inhand = locations[player_position].ticket()
-        # TODO Make swapping Tickets possible again. Now they are deleted.
-
-    elif command == "Q":
-        print()
-        print("Good bye! I hope you had fun playing this game!")
-        print()
-        exit()
-
-    else:
-        print()
-        print()
-        print()
-        print()
-        print(f"This command is not possible in/on/at {locations[player_position]}. Please try again")
-
+    process_input()
     free_ticket_use_fix()
-
     check_winning()
 
     # thief position(pos_com)

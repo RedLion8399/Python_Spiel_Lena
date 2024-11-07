@@ -27,4 +27,5 @@ def command_help() -> None:
         print("[P] to pick up the item in that place")
         print("[K] to switch the item you have with the item in that place")
         print("[Q] to quit the game")
+        print("[H] to show this help again")
         print(" ")
