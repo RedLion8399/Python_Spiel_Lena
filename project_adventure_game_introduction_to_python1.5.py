@@ -20,6 +20,7 @@
 from random import randint
 from places import locations, forbidden_player_starts, forbidden_thief_starts, boat_docks
 from functions import greeting, command_help
+from ticket import Ticket
 
 
 # setting beginning variables of player and computer
@@ -42,11 +43,9 @@ while thief_position in forbidden_thief_starts:
 # defining some variables for later
 running: bool = True  # Variable is never changed TODO deleting the variable or giving a sence to it
 command: str = " "
-boat_or_train: int = 0
-inhand: str | int = " "
-transition: str | int  # Only used once TODO maybe there's an alternative
+inhand: Ticket = Ticket(0)
+transition: int  # Only used once TODO maybe there's an alternative
 moves: int = 0
-second_digit_com: int
 new_move: bool = True  # Decides if stats are shown
 
 # Shows where the player can go from his current location
@@ -90,39 +89,39 @@ def print_moving_opportunitys() -> None:
 def free_ticket_use_fix() -> None:
     global player_position, inhand
     print()
-    if (player_position == 71 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+    if (player_position == 71 and inhand.ticket_type not in [1, 3]):
         print("You cannot take the underground without a valid ticket.")
         print("Please try again.")
         player_position = 1
-    elif (player_position == 72 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+    elif (player_position == 72 and inhand.ticket_type not in [1, 3]):
         print("You cannot take the underground without a valid ticket.")
         print("Please try again.")
         player_position = 6
-    elif (player_position == 73 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+    elif (player_position == 73 and inhand.ticket_type not in [1, 3]):
         print("You cannot take the underground without a valid ticket.")
         print("Please try again.")
         player_position = 17
-    elif (player_position == 74 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+    elif (player_position == 74 and inhand.ticket_type not in [1, 3]):
         print("You cannot take the underground without a valid ticket.")
         print("Please try again.")
         player_position = 21
-    elif (player_position == 75 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+    elif (player_position == 75 and inhand.ticket_type not in [1, 3]):
         print("You cannot take the underground without a valid ticket.")
         print("Please try again.")
         player_position = 23
-    elif (player_position == 76 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+    elif (player_position == 76 and inhand.ticket_type not in [1, 3]):
         print("You cannot take the underground without a valid ticket.")
         print("Please try again.")
         player_position = 52
-    elif (player_position == 77 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+    elif (player_position == 77 and inhand.ticket_type not in [1, 3]):
         print("You cannot take the underground without a valid ticket.")
         print("Please try again.")
         player_position = 66
-    elif (player_position == 78 and inhand != "underground-ticket" and inhand != "Used_once_underground-ticket"):
+    elif (player_position == 78 and inhand.ticket_type not in [1, 3]):
         print("You cannot take the underground without a valid ticket.")
         print("Please try again.")
         player_position = 79
-    elif (player_position in boat_docks and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket"):
+    elif (player_position in boat_docks and inhand.ticket_type not in [2, 4]):
         print("You cannot take the boat without a valid ticket.")
         print("Please try again.")
     print()
@@ -245,35 +244,35 @@ def process_input() -> None:
             move_player("DOWN")
 
         case "X":
-            if inhand == " ":
+            if not inhand.ticket_type:
                 print("Yo have no item in your hand.")
                 return
-            if locations[player_position].ticket_number:
+            if locations[player_position].ticket.ticket_type:
                 print("There is already a ticket on the ground.")
                 return
-            # TODO Make droping tickets possible. Now they are deleted.
-            inhand = " "
+            locations[player_position].ticket.ticket_type = inhand.ticket_type
+            inhand.ticket_type = 0
         
         case "P":
-            if inhand != " ":
+            if inhand.ticket_type:
                 print("Yo have already an item in your hand.")
                 return
-            if not locations[player_position].ticket_number:
+            if not locations[player_position].ticket.ticket_type:
                 print("There is no ticket on the ground.")
                 return
-            inhand = locations[player_position].ticket()
-            locations[player_position].ticket_number = 0
+            inhand.ticket_type = locations[player_position].ticket.ticket_type
+            locations[player_position].ticket.ticket_type = 0
 
         case "K":
-            if not locations[player_position].ticket_number:
+            if not locations[player_position].ticket.ticket_type:
                 print("There is no ticket on the ground.")
                 return
-            if inhand == " ":
+            if not inhand.ticket_type:
                 print("Yo have no item in your hand.")
                 return
-            transition = inhand
-            inhand = locations[player_position].ticket()
-            # TODO Make swapping Tickets possible again. Now they are deleted.
+            transition = inhand.ticket_type
+            inhand.ticket_type = locations[player_position].ticket.ticket_type
+            locations[player_position].ticket.ticket_type = transition
 
         case "Q":
             print()
@@ -295,6 +294,8 @@ def process_input() -> None:
         
     new_move = True
 
+def drive() -> None:
+    pass
 
 # The main programm starts here.
 # TODO Wrap this programm into a main function to set a main entrence point.
@@ -309,7 +310,7 @@ while running:
         print_relative_positions()
 
         # inventary
-        if inhand == " ":
+        if not inhand.ticket_type:
             print("You have currently nothing in your hand.")
         else:
             print(f"You are currently in possession of a/an {inhand}.")
@@ -318,10 +319,10 @@ while running:
         new_move = False
 
     # Objects
-    if ((locations[player_position].ticket_number == 1 or locations[player_position].ticket_number == 2) and inhand == " "):
-        print(f"You can pick-up the: {locations[player_position].ticket()}.")
-    elif ((locations[player_position].ticket_number == 1 or locations[player_position].ticket_number == 2) and inhand != " "):
-        print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket()}.")
+    if (locations[player_position].ticket.ticket_type and not inhand.ticket_type):
+        print(f"You can pick-up the: {locations[player_position].ticket.ticket_type}.")
+    elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
+        print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket.ticket_type}.")
     print()
 
 
@@ -331,63 +332,32 @@ while running:
 
     # Validity boat tickets
 
-    if inhand == "Used_once_boat-ticket":
-        if player_position == 29 and command != "S":
-            pass
-        if player_position == 50 and command != "N":
-            pass
+    if inhand.vehicle == "BOAT":
         if player_position == 50 and command == "N":
-            inhand = " "
+            inhand.use_ticket()
         elif player_position == 29 and command == "S":
-            inhand = " "
+            inhand.use_ticket()
 
-    if inhand == "boat-ticket":
-        if player_position == 29 and command != "S":
-            pass
-        if player_position == 50 and command != "N":
-            pass
-        elif player_position == 29 and command == "S":
-            inhand = "Used_once_boat-ticket"
-        elif player_position == 50 and command == "N":
-            inhand = "Used_once_boat-ticket"
 
-    # atempt nr. 3 validity of tickets
+    # Validity underground tickets
 
-    if inhand == "Used_once_underground-ticket":
+    if inhand.vehicle == "UNDERGROUND":
         if player_position == 71 and (command == "N" or command == "S" or command == "E"):
-            inhand = " "
+            inhand.use_ticket()
         if player_position == 72 and (command == "N" or command == "S" or command == "E" or command == "W"):
-            inhand = " "
+            inhand.use_ticket()
         if player_position == 73 and (command == "N" or command == "W"):
-            inhand = " "
+            inhand.use_ticket()
         if player_position == 74 and (command == "N" or command == "E"):
-            inhand = " "
+            inhand.use_ticket()
         if player_position == 75 and (command == "N" or command == "S" or command == "E" or command == "W"):
-            inhand = " "
+            inhand.use_ticket()
         if player_position == 76 and (command == "N" or command == "E"):
-            inhand = " "
+            inhand.use_ticket()
         if player_position == 77 and (command == "N" or command == "E"):
-            inhand = " "
+            inhand.use_ticket()
         if player_position == 78 and (command == "N" or command == "W"):
-            inhand = " "
-
-    if inhand == "underground-ticket":
-        if player_position == 71 and (command == "N" or command == "S" or command == "E"):
-            inhand = "Used_once_underground-ticket"
-        elif player_position == 72 and (command == "N" or command == "S" or command == "E" or command == "W"):
-            inhand = "Used_once_underground-ticket"
-        elif player_position == 73 and (command == "N" or command == "W"):
-            inhand = "Used_once_underground-ticket"
-        elif player_position == 74 and (command == "N" or command == "E"):
-            inhand = "Used_once_underground-ticket"
-        elif player_position == 75 and (command == "N" or command == "S" or command == "E" or command == "W"):
-            inhand = "Used_once_underground-ticket"
-        elif player_position == 76 and (command == "N" or command == "E"):
-            inhand = "Used_once_underground-ticket"
-        elif player_position == 77 and (command == "N" or command == "E"):
-            inhand = "Used_once_underground-ticket"
-        elif player_position == 78 and (command == "N" or command == "W"):
-            inhand = "Used_once_underground-ticket"
+            inhand.use_ticket()
 
 
     process_input()

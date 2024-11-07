@@ -1,4 +1,5 @@
 from random import randint
+from ticket import Ticket
 
 
 class Location:
@@ -12,30 +13,17 @@ class Location:
         self.west: int = west
         self.up: int = up
         self.down: int = down
+        self.ticket: Ticket
 
-        if objects:
-            self.ticket_number:int = self._create_Ticket()
-        else:
-            self.ticket_number: int = 0
+        self.ticket = self._create_Ticket() if objects else Ticket(0)
 
-    def ticket(self) -> str:
-        match self.ticket_number:
-            case 0:
-                return ""
-            case 1:
-                return "underground-ticket"
-            case 2:
-                return "boat-ticket"
-            case _:
-                raise ValueError("Unknown ticket value assigned. Please reoprt this to the author.")
-
-    def _create_Ticket(self) -> int:
+    def _create_Ticket(self) -> Ticket:
         if randint(1, 6) != 5:      # The propability for any ticket is about 16,6%
-            return 0                # The propability for no ticket is about 83,3%
+            return Ticket(0)        # The propability for no ticket is about 83,3%
         if randint(1,4) != 1:       # The conditional propability for a boat ticket if we've alredy got a ticket is 25%
-            return 1                # The Total probability for an undergraund-ticket is about 16,6%
+            return Ticket(1)        # The Total probability for an undergraund-ticket is about 16,6%
         else:                       #
-            return 2                # The total propability for a boat-ticket is about 4,16%s
+            return Ticket(2)        # The total propability for a boat-ticket is about 4,16%s
 
     def __repr__(self) -> str:
         return self.name
