@@ -18,7 +18,7 @@
 
 
 from random import randint
-from places import Desc, Objects, North, South, East, West, Up, Down
+from places import locations, forbidden_player_starts, forbidden_thief_starts, boat_docks
 from functions import greeting, command_help
 
 
@@ -26,13 +26,13 @@ from functions import greeting, command_help
 
 # Selecting a random point to start with excluding those, who can only reached by underground
 player_position: int = 0  # position at beginning
-while player_position in [ 0, 1, 7, 8, 9, 10, 18, 19, 20, 29, 30, 34, 35, 36, 37, 38, 49, 40, 54, 64, 71, 72, 73, 74, 75, 76, 77, 78]:
+while player_position in forbidden_player_starts:
     player_position = randint(1, 81)
 
-
+forbidden_thief_starts.append(player_position)
 thief_position: int = 0
 
-while thief_position in [player_position, 0, 34, 35, 36, 37, 38, 39, 40, 54, 64, 71, 72, 73, 74, 75, 76, 77, 78]:
+while thief_position in forbidden_thief_starts:
     thief_position = randint(1, 81)
     while (thief_position + 2 == player_position or thief_position - 2 == player_position):
         thief_position = randint(1, 81)
@@ -40,47 +40,48 @@ while thief_position in [player_position, 0, 34, 35, 36, 37, 38, 39, 40, 54, 64,
         thief_position = randint(1, 81)
 
 # defining some variables for later
-running: bool = True  # Variable is never changed TODO deleting the variable or giving a sence toi it
+running: bool = True  # Variable is never changed TODO deleting the variable or giving a sence to it
 command: str = " "
 boat_or_train: int = 0
 inhand: str | int = " "
 transition: str | int  # Only used once TODO maybe there's an alternative
 moves: int = 0
+second_digit_com: int
 
 # Shows where the player can go from his current location
 def print_moving_opportunitys() -> None:
-    if North[player_position]:
-        print(f"You can go North to {Desc[North[player_position]]}.")
+    if locations[player_position].north:
+        print(f"You can go North to {locations[locations[player_position].north]}.")
     else:
         print("You cannot go North.")
     print()
 
-    if South[player_position]:
-        print(f"You can go South to {Desc[South[player_position]]}.")
+    if locations[player_position].south:
+        print(f"You can go South to {locations[locations[player_position].south]}.")
     else:
         print("You cannot go South.")
     print()
 
-    if East[player_position]:
-        print(f"You can go East to {Desc[East[player_position]]}.")
+    if locations[player_position].east:
+        print(f"You can go East to {locations[locations[player_position].east]}.")
     else:
         print("You cannot go East.")
     print()
 
-    if West[player_position]:
-        print(f"You can go West to {Desc[West[player_position]]}.")
+    if locations[player_position].west:
+        print(f"You can go West to {locations[locations[player_position].west]}.")
     else:
         print("You cannot go West.")
     print()
 
-    if Down[player_position]:
-        print(f"You can go down to {Desc[Down[player_position]]}.")
+    if locations[player_position].down:
+        print(f"You can go down to {locations[locations[player_position].down]}.")
     else:
         print("There is no (other) underground station here.")
     print()
 
-    if Up[player_position]:
-        print(f"You can go up to {Desc[Up[player_position]]}.")
+    if locations[player_position].up:
+        print(f"You can go up to {locations[locations[player_position].up]}.")
     else:
         print("You are currently not in an underground station.")
     print()
@@ -119,48 +120,12 @@ def free_ticket_use_fix() -> None:
         print("You cannot take the underground without a valid ticket.")
         print("Please try again.")
         player_position = 79
-    elif (player_position == 50 and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket"):
-        print("You cannot take the boat without a valid ticket.")
-        print("Please try again.")
-    elif (player_position == 29 and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket"):
+    elif (player_position in boat_docks and inhand != "boat-ticket" and inhand != "Used_once_boat-ticket"):
         print("You cannot take the boat without a valid ticket.")
         print("Please try again.")
     print()
 
-greeting()
-
-while running:
-    command_help()
-
-    # Printing the position of the thief an the player
-    print()
-    print(f"You are in/on/at {Desc[player_position]}.")
-    print()
-    print(f"The thief is in/on/at {Desc[thief_position]}.")
-    print()
-
-    print_moving_opportunitys()
-
-    second_digit_com = 0
-
-    # Explain where the thief is:
-    pos_com_str = str(thief_position)
-    pos_com_list = list(pos_com_str)
-
-    position_str = str(player_position)
-    position_list = list(position_str)
-
-    if thief_position < 10:
-        pos_com_list = [0] + pos_com_list
-    if player_position < 10:
-        position_list = [0] + position_list
-
-    first_digit_com = int(pos_com_list[0])
-    second_digit_com = int(pos_com_list[1])
-
-    first_digit_player = int(position_list[0])
-    second_digit_player = int(position_list[1])
-
+def check_winning() -> None:
     if thief_position == player_position:
         print()
         print()
@@ -169,34 +134,59 @@ while running:
         print()
         exit()
 
-    if first_digit_player < first_digit_com:
+def print_positions() -> None:
+    print()
+    print(f"You are in/on/at {locations[player_position]}.")
+    print()
+    print(f"The thief is in/on/at {locations[thief_position]}.")
+    print()
+
+def print_relative_positions() -> None:
+    def coordinate_unpacking(place_value:int) -> tuple[int, int]:
+        # Converting the Value of that place in a tuple with two items
+        first_digit: int
+        second_digit: int
+        # A Value < 10 only has one item. So it can not be converted because a n integer has no unessesery zerros
+        if place_value > 10:
+            place_string: str = str(place_value)
+            first_digit = int(place_string[0])
+            second_digit = int(place_string[1])
+        else:
+            first_digit = 0
+            second_digit = place_value
+        return (first_digit, second_digit)
+    
+    player_coordinate: tuple[int, int] = coordinate_unpacking(player_position)
+    thief_coordinate: tuple[int, int] = coordinate_unpacking(thief_position)
+
+    # Comparing the singular coordinates to calucalte the relative direction
+    if player_coordinate[0] < thief_coordinate[0]:
         print("The thief is more in the South.")
-    elif first_digit_player > first_digit_com:
+    elif player_coordinate[0] > thief_coordinate[0]:
         print("The thief is more in the North.")
-    elif first_digit_player == first_digit_com:
+    elif player_coordinate[0] == thief_coordinate[0]:
         print("The thief is on the same height as you. You are close, try to go West or East.")
     print()
 
-    if second_digit_player > second_digit_com:
+    if player_coordinate[1] > thief_coordinate[1]:
         print("The thief is more in the West.")
-    elif second_digit_player < second_digit_com:
+    elif player_coordinate[1] < thief_coordinate[1]:
         print("The thief is more in the East.")
-    elif second_digit_player == second_digit_com:
+    elif player_coordinate[1] == thief_coordinate[1]:
         print("The thief is on the same height as you. You are close, try to go North or South.")
     print()
     print()
 
-    # random object
-    if Objects[player_position] == 5:
-        str(Objects[player_position])
-        boat_or_train = randint(1, 4)
-        if boat_or_train == 1:
-            Objects[player_position] = "boat-ticket"
-        else:
-            Objects[player_position] = "underground-ticket"
-    elif Objects[player_position] != 5:
-        str(Objects[player_position])
-        Objects[player_position] = " "
+
+# The main programm starts here.
+# TODO Wrap this programm into a main function to set a main entrence point.
+greeting()
+
+while running:
+    command_help()
+    print_positions()
+    print_moving_opportunitys()
+    print_relative_positions()
 
     # inventary
     if inhand == " ":
@@ -207,10 +197,10 @@ while running:
     print()
 
     # Objects
-    if (Objects[player_position] == ("underground-ticket" or Objects[player_position] == "boat-ticket") and inhand == " "):
-        print(f"You can pick-up the: {Objects[player_position]}.")
-    elif (Objects[player_position] == ("underground-ticket" or Objects[player_position] == "boat-ticket") and inhand != " "):
-        print(f"You can switch the: {inhand} with a/an {Objects[player_position]}.")
+    if ((locations[player_position].ticket_number == 1 or locations[player_position].ticket_number == 2) and inhand == " "):
+        print(f"You can pick-up the: {locations[player_position].ticket()}.")
+    elif ((locations[player_position].ticket_number == 1 or locations[player_position].ticket_number == 2) and inhand != " "):
+        print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket()}.")
     print()
 
     # Asking user to input a command
@@ -278,36 +268,36 @@ while running:
             inhand = "Used_once_underground-ticket"
 
     # Reacting to a user input
-    if command == "N" and North[player_position]:
-        player_position = North[player_position]
+    if command == "N" and locations[player_position].north:
+        player_position = locations[player_position].north
 
-    elif command == "S" and South[player_position]:
-        player_position = South[player_position]
+    elif command == "S" and locations[player_position].south:
+        player_position = locations[player_position].south
 
-    elif command == "W" and West[player_position]:
-        player_position = West[player_position]
+    elif command == "W" and locations[player_position].west:
+        player_position = locations[player_position].west
 
-    elif command == "E" and East[player_position]:
-        player_position = East[player_position]
+    elif command == "E" and locations[player_position].east:
+        player_position = locations[player_position].east
 
-    elif command == "U" and Up[player_position]:
-        player_position = Up[player_position]
+    elif command == "U" and locations[player_position].up:
+        player_position = locations[player_position].up
 
-    elif command == "D" and Down[player_position]:
-        player_position = Down[player_position]
+    elif command == "D" and locations[player_position].down:
+        player_position = locations[player_position].down
 
-    elif command == "X" and inhand != " " and Objects[player_position] == " ":
-        Objects[player_position] = inhand
+    elif command == "X" and inhand != " " and not locations[player_position].ticket_number:
+        # TODO Make droping tickets possible. Now they are deleted.
         inhand = " "
 
-    elif command == "P" and inhand == " " and Objects[player_position] != " ":
-        inhand = Objects[player_position]
-        Objects[player_position] = " "
+    elif command == "P" and inhand == " " and locations[player_position].ticket() != " ":
+        inhand = locations[player_position].ticket()
+        locations[player_position].ticket_number = 0
 
-    elif command == "K" and inhand != " " and Objects[player_position] != " ":
+    elif command == "K" and inhand != " " and locations[player_position].ticket() != " ":
         transition = inhand
-        inhand = Objects[player_position]
-        Objects[player_position] = transition
+        inhand = locations[player_position].ticket()
+        # TODO Make swapping Tickets possible again. Now they are deleted.
 
     elif command == "Q":
         print()
@@ -320,39 +310,41 @@ while running:
         print()
         print()
         print()
-        print(f"This command is not possible in/on/at {Desc[player_position]}. Please try again")
+        print(f"This command is not possible in/on/at {locations[player_position]}. Please try again")
 
     free_ticket_use_fix()
+
+    check_winning()
 
     # thief position(pos_com)
     moves += 1
 
     if moves == 3:
         pos_com_random = randint(1, 5)
-        if pos_com_random == 1 and West[thief_position] != 0:
+        if pos_com_random == 1 and locations[thief_position].west != 0:
             thief_position -= 1
             moves = 0
         elif pos_com_random == 2 and thief_position == 50:
             thief_position = 29
             moves = 0
-        elif pos_com_random == 2 and North[thief_position] != 0:
+        elif pos_com_random == 2 and locations[thief_position].north != 0:
             thief_position -= 10
             moves = 0
-        elif pos_com_random == 3 and East[thief_position] != 0:
+        elif pos_com_random == 3 and locations[thief_position].east != 0:
             thief_position += 1
             moves = 0
         elif pos_com_random == 3 and thief_position == 29:
             thief_position = 50
             moves = 0
-        elif pos_com_random == 4 and South[thief_position] != 0:
+        elif pos_com_random == 4 and locations[thief_position].south != 0:
             thief_position += 10
             moves = 0
 
-        elif pos_com_random == 1 and West[thief_position] == 0:
+        elif pos_com_random == 1 and locations[thief_position].west == 0:
             break
-        elif pos_com_random == 2 and North[thief_position] == 0:
+        elif pos_com_random == 2 and locations[thief_position].north == 0:
             break
-        elif pos_com_random == 3 and East[thief_position] == 0:
+        elif pos_com_random == 3 and locations[thief_position].east == 0:
             break
-        elif pos_com_random == 4 and South[thief_position] == 0:
+        elif pos_com_random == 4 and locations[thief_position].south == 0:
             break

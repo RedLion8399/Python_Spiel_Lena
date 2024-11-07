@@ -1,20 +1,49 @@
 from random import randint
 
+
 class Location:
     def __init__(self, name:str, coordinate:int, objects:bool=True, north:int=0, south:int=0, east:int=0, west:int=0, up:int=0, down:int=0) -> None:
-        self.name = name
-        self.coordinate = coordinate
-        self.object = objects
-        self.north = north
-        self.south = south
-        self.east = east
-        self.west = west
-        self.up = up
-        self.down = down
+        self.name: str = name
+        self.coordinate: int = coordinate
+        self.object: bool = objects
+        self.north: int = north
+        self.south: int = south
+        self.east: int = east
+        self.west: int = west
+        self.up: int = up
+        self.down: int = down
 
+        if objects:
+            self.ticket_number:int = self._create_Ticket()
+
+    def ticket(self) -> str:
+        match self.ticket_number:
+            case 0:
+                return ""
+            case 1:
+                return "underground-ticket"
+            case 2:
+                return "boat-ticket"
+            case _:
+                raise ValueError("Unknown ticket value assigned. Please reoprt this to the author.")
+
+    def _create_Ticket(self) -> int:
+        if randint(1, 6) != 5:      # The propability for any ticket is about 16,6%
+            return 0                # The propability for no ticket is about 83,3%
+        if randint(1,4) != 1:       # The conditional propability for a boat ticket if we've alredy got a ticket is 25%
+            return 1                # The Total probability for an undergraund-ticket is about 16,6%
+        else:                       #
+            return 2                #The total propability for a boat-ticket is about 4,16%s
+
+    def __repr__(self) -> str:
+        return self.name
+
+
+# Creating all istances of the class. One for each place
 locations: list[Location]
 
 locations = [
+    Location("", 0),  # This item only exists to start with index 0
     Location("Paddington Station", 1, down=71),
     Location("Regent's Park", 2, east=3),
     Location("Regent's Park", 3,  south=13, west=2),
@@ -28,6 +57,7 @@ locations = [
     Location("Hyde Park", 11, south=21, east=12),
     Location("Brook Street", 12, south=22, east=13, west=11),
     Location("Regent Street", 13, north=3, south=23, west=12),
+    Location("British Museum", 14, north=4, south=24),
     Location("Queen Victoria Street", 15, south=25, east=16),
     Location("King William Street", 16, east=17, west=15),
     Location("Tower Hill Station", 17, south=27, west=16, down=73),
@@ -95,3 +125,12 @@ locations = [
     Location("Elefant & Castle Station", 79, east=80, down=78),
     Location("Old Kent Road", 80, north=70, west=79),
 ]
+
+# Lists with special places to choose from in the later programm
+forbidden_player_starts: list[int] = [0, 1, 7, 8, 9, 10, 18, 19, 20, 29, 30, 34, 35, 36, 37, 38, 49, 40, 54, 64, 71, 72, 73, 74, 75, 76, 77, 78]
+
+forbidden_thief_starts: list[int] = [0, 34, 35, 36, 37, 38, 39, 40, 54, 64, 71, 72, 73, 74, 75, 76, 77, 78]
+
+underground_stations: list[int] = [71, 72, 73, 74, 75, 76, 77, 78]
+
+boat_docks: list[int] = [29, 50]
