@@ -1,5 +1,5 @@
 # Title: Adventure Game
-# Version: 1.7.1
+# Version: 1.7.2
 # Date: October 15, 2024 - November xx, 2024
 #
 # Author: Lena Weinstock
@@ -101,6 +101,21 @@ def print_positions() -> None:
     print()
     print(f"The thief is in/on/at {locations[thief_position]}.")
     print(color.CYAN)
+
+def print_hand_status() -> None:
+    if not inhand.ticket_type:
+        print("You have currently nothing in your hand.")
+    else:
+        print(f"You are currently in possession of a/an {inhand}.")
+    print()
+    print()
+
+def print_object_status() -> None:
+    if (locations[player_position].ticket.ticket_type and not inhand.ticket_type):
+        print(f"You can pick-up the: {locations[player_position].ticket}.")
+    elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
+        print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket}.")
+    print(color.RESET)
 
 def print_relative_positions() -> None:
     def coordinate_unpacking(place_value:int) -> tuple[int, int]:
@@ -327,23 +342,9 @@ def main() -> None:
             print_positions()
             print_moving_opportunitys()
             print_relative_positions()
-
-            # inventary
-            if not inhand.ticket_type:
-                print("You have currently nothing in your hand.")
-            else:
-                print(f"You are currently in possession of a/an {inhand}.")
-            print()
-            print()
+            print_hand_status()
             new_move = False
-
-        # Objects
-        if (locations[player_position].ticket.ticket_type and not inhand.ticket_type):
-            print(f"You can pick-up the: {locations[player_position].ticket}.")
-        elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
-            print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket}.")
-        print(color.RESET)
-
+        print_object_status()
 
         # Asking user to input a command
         command = input("select a command out of the list above: ").upper()
