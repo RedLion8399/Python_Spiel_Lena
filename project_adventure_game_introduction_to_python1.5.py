@@ -1,5 +1,5 @@
 # Title: Adventure Game
-# Version: 1.7
+# Version: 1.7.1
 # Date: October 15, 2024 - November xx, 2024
 #
 # Author: Lena Weinstock
@@ -21,6 +21,7 @@ from random import randint
 from places import locations, forbidden_player_starts, forbidden_thief_starts, boat_docks, underground_stations
 from functions import greeting, command_help
 from ticket import Ticket
+from color import color
 
 
 # setting beginning variables of player and computer
@@ -71,7 +72,7 @@ def print_moving_opportunitys() -> None:
         print(f"You can go West to {locations[locations[player_position].west]}.")
     else:
         print("You cannot go West.")
-    print()
+    print(color.PURPLE)
 
     if locations[player_position].down:
         print(f"You can go down to {locations[locations[player_position].down]}.")
@@ -83,23 +84,23 @@ def print_moving_opportunitys() -> None:
         print(f"You can go up to {locations[locations[player_position].up]}.")
     else:
         print("You are currently not in an underground station.")
-    print()
+    print(color.YELLOW)
 
 def check_winning() -> None:
     if thief_position == player_position:
-        print()
+        print(color.RED)
         print()
         print("Congratulations! You have successfully caught the thief!")
         print("Good job!")
-        print()
+        print(color.RESET)
         exit()
 
 def print_positions() -> None:
-    print()
+    print(color.GREEN)
     print(f"You are in/on/at {locations[player_position]}.")
     print()
     print(f"The thief is in/on/at {locations[thief_position]}.")
-    print()
+    print(color.CYAN)
 
 def print_relative_positions() -> None:
     def coordinate_unpacking(place_value:int) -> tuple[int, int]:
@@ -135,7 +136,7 @@ def print_relative_positions() -> None:
     elif player_coordinate[1] == thief_coordinate[1]:
         print("The thief is on the same height as you. You are close, try to go North or South.")
     print()
-    print()
+    print(color.BLUE)
 
 def move_player(direction: str) -> None:
     global locations, player_position
@@ -341,7 +342,7 @@ def main() -> None:
             print(f"You can pick-up the: {locations[player_position].ticket}.")
         elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
             print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket}.")
-        print()
+        print(color.RESET)
 
 
         # Asking user to input a command
