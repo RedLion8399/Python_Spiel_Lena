@@ -1,5 +1,5 @@
 # Title: Adventure Game
-# Version: 1.6
+# Version: 1.7
 # Date: October 15, 2024 - November xx, 2024
 #
 # Author: Lena Weinstock
@@ -41,7 +41,6 @@ while thief_position in forbidden_thief_starts:
         thief_position = randint(1, 80)
 
 # defining some variables for later
-running: bool = True  # Variable is never changed TODO deleting the variable or giving a sence to it
 command: str = " "
 inhand: Ticket = Ticket(0)
 transition: int  # Only used once TODO maybe there's an alternative
@@ -316,44 +315,49 @@ def move_thief() -> None:
         
 
 # The main programm starts here.
-# TODO Wrap this programm into a main function to set a main entrence point.
-greeting()
-command_help()
+def main() -> None:
+    global new_move, command, moves
+    greeting()
+    command_help()
 
-while running:
-    # Show status
-    if new_move:
-        print_positions()
-        print_moving_opportunitys()
-        print_relative_positions()
+    while True:
+        # Show status
+        if new_move:
+            print_positions()
+            print_moving_opportunitys()
+            print_relative_positions()
 
-        # inventary
-        if not inhand.ticket_type:
-            print("You have currently nothing in your hand.")
-        else:
-            print(f"You are currently in possession of a/an {inhand}.")
+            # inventary
+            if not inhand.ticket_type:
+                print("You have currently nothing in your hand.")
+            else:
+                print(f"You are currently in possession of a/an {inhand}.")
+            print()
+            print()
+            new_move = False
+
+        # Objects
+        if (locations[player_position].ticket.ticket_type and not inhand.ticket_type):
+            print(f"You can pick-up the: {locations[player_position].ticket}.")
+        elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
+            print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket}.")
         print()
+
+
+        # Asking user to input a command
+        command = input("select a command out of the list above: ").upper()
         print()
-        new_move = False
 
-    # Objects
-    if (locations[player_position].ticket.ticket_type and not inhand.ticket_type):
-        print(f"You can pick-up the: {locations[player_position].ticket}.")
-    elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
-        print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket}.")
-    print()
+        process_input()
+        check_winning()
+
+        # Every three player_moves the thief moves one location
+        if new_move:
+            moves += 1
+        if moves == 3:
+            move_thief()
+            moves = 0
 
 
-    # Asking user to input a command
-    command = input("select a command out of the list above: ").upper()
-    print()
-
-    process_input()
-    check_winning()
-
-    # Every three player_moves the thief moves one location
-    if new_move:
-        moves += 1
-    if moves == 3:
-        move_thief()
-        moves = 0
+if __name__ == "__main__":
+    main()
