@@ -12,7 +12,8 @@ class Ticket:
         if self.left_uses == 1:
             self.ticket_type = 3 if self.vehicle == "UNDERGROUND" else 4
         else:
-            self.ticket_type = 1 if self.vehicle == "UNDERGROUND" else 2
+            self.ticket_type = 0
+            self.vehicle = ""
 
 
     def __repr__(self) -> str:

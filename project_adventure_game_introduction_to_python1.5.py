@@ -18,7 +18,7 @@
 
 
 from random import randint
-from places import locations, forbidden_player_starts, forbidden_thief_starts, boat_docks
+from places import locations, forbidden_player_starts, forbidden_thief_starts, boat_docks, underground_stations
 from functions import greeting, command_help
 from ticket import Ticket
 
@@ -86,46 +86,6 @@ def print_moving_opportunitys() -> None:
         print("You are currently not in an underground station.")
     print()
 
-def free_ticket_use_fix() -> None:
-    global player_position, inhand
-    print()
-    if (player_position == 71 and inhand.ticket_type not in [1, 3]):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 1
-    elif (player_position == 72 and inhand.ticket_type not in [1, 3]):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 6
-    elif (player_position == 73 and inhand.ticket_type not in [1, 3]):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 17
-    elif (player_position == 74 and inhand.ticket_type not in [1, 3]):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 21
-    elif (player_position == 75 and inhand.ticket_type not in [1, 3]):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 23
-    elif (player_position == 76 and inhand.ticket_type not in [1, 3]):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 52
-    elif (player_position == 77 and inhand.ticket_type not in [1, 3]):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 66
-    elif (player_position == 78 and inhand.ticket_type not in [1, 3]):
-        print("You cannot take the underground without a valid ticket.")
-        print("Please try again.")
-        player_position = 79
-    elif (player_position in boat_docks and inhand.ticket_type not in [2, 4]):
-        print("You cannot take the boat without a valid ticket.")
-        print("Please try again.")
-    print()
-
 def check_winning() -> None:
     if thief_position == player_position:
         print()
@@ -186,11 +146,17 @@ def move_player(direction: str) -> None:
             if not locations[player_position].north:
                 print(f"At {locations[player_position]} you can not go north.")
                 return
+            if not is_undergraund_possible(direction):
+                return
+            if not is_booat_possible(direction):
+                return
             player_position = locations[player_position].north
 
         case "EAST":
             if not locations[player_position].east:
                 print(f"At {locations[player_position]} you can not go east.")
+                return
+            if not is_undergraund_possible(direction):
                 return
             player_position = locations[player_position].east
 
@@ -198,11 +164,17 @@ def move_player(direction: str) -> None:
             if not locations[player_position].south:
                 print(f"At {locations[player_position]} you can not go south.")
                 return
+            if not is_undergraund_possible(direction):
+                return
+            if not is_booat_possible(direction):
+                return
             player_position = locations[player_position].south
 
         case "WEST":
             if not locations[player_position].west:
                 print(f"At {locations[player_position]} you can not go west.")
+                return
+            if not is_undergraund_possible(direction):
                 return
             player_position = locations[player_position].west
 
@@ -294,8 +266,54 @@ def process_input() -> None:
         
     new_move = True
 
-def drive() -> None:
-    pass
+def is_undergraund_possible(direction:str) -> bool:
+    if player_position not in underground_stations:
+        return True
+    if direction == "UP":
+        return True
+    if inhand.vehicle == "UNDERGROUND":
+        # This partis only executed if the player is traveling with the underground
+        inhand.use_ticket()
+        return True
+    # This partis only executed if the player tyest to take the underground without a valid ticket
+    print("You can not take the underground without a valid ticket.")
+    return False
+
+def is_booat_possible(direction:str) -> bool:
+    if player_position not in boat_docks:
+        return True
+    if not (player_position == 29 and direction == "SOUTH" or player_position == 50 and direction == "NORTH"):
+        return True
+    if inhand.vehicle == "BOAT":
+        # This partis only executed if the player is traveling with the boat
+        inhand.use_ticket()
+        return True
+    # This partis only executed if the player tyest to take the boat without a valid ticket
+    print("You can not take the boat without a valid ticket.")
+    return False
+
+def move_thief() -> None:
+    global thief_position
+    match randint(1, 5):
+        case 1:
+            if locations[thief_position].west:
+                thief_position -= 1
+        case 2:
+            if thief_position == 50:
+                thief_position = 29
+            elif locations[thief_position].north:
+                thief_position -= 10
+        case 3:
+            if thief_position == 29:
+                thief_position = 50
+            elif locations[thief_position].east:
+                thief_position += 1
+        case 4:
+            if locations[thief_position].south:
+                thief_position += 10
+        case _:
+            pass
+        
 
 # The main programm starts here.
 # TODO Wrap this programm into a main function to set a main entrence point.
@@ -320,9 +338,9 @@ while running:
 
     # Objects
     if (locations[player_position].ticket.ticket_type and not inhand.ticket_type):
-        print(f"You can pick-up the: {locations[player_position].ticket.ticket_type}.")
+        print(f"You can pick-up the: {locations[player_position].ticket}.")
     elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
-        print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket.ticket_type}.")
+        print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket}.")
     print()
 
 
@@ -330,69 +348,12 @@ while running:
     command = input("select a command out of the list above: ").upper()
     print()
 
-    # Validity boat tickets
-
-    if inhand.vehicle == "BOAT":
-        if player_position == 50 and command == "N":
-            inhand.use_ticket()
-        elif player_position == 29 and command == "S":
-            inhand.use_ticket()
-
-
-    # Validity underground tickets
-
-    if inhand.vehicle == "UNDERGROUND":
-        if player_position == 71 and (command == "N" or command == "S" or command == "E"):
-            inhand.use_ticket()
-        if player_position == 72 and (command == "N" or command == "S" or command == "E" or command == "W"):
-            inhand.use_ticket()
-        if player_position == 73 and (command == "N" or command == "W"):
-            inhand.use_ticket()
-        if player_position == 74 and (command == "N" or command == "E"):
-            inhand.use_ticket()
-        if player_position == 75 and (command == "N" or command == "S" or command == "E" or command == "W"):
-            inhand.use_ticket()
-        if player_position == 76 and (command == "N" or command == "E"):
-            inhand.use_ticket()
-        if player_position == 77 and (command == "N" or command == "E"):
-            inhand.use_ticket()
-        if player_position == 78 and (command == "N" or command == "W"):
-            inhand.use_ticket()
-
-
     process_input()
-    free_ticket_use_fix()
     check_winning()
 
-    # thief position(pos_com)
-    moves += 1
-
+    # Every three player_moves the thief moves one location
+    if new_move:
+        moves += 1
     if moves == 3:
-        pos_com_random = randint(1, 5)
-        if pos_com_random == 1 and locations[thief_position].west != 0:
-            thief_position -= 1
-            moves = 0
-        elif pos_com_random == 2 and thief_position == 50:
-            thief_position = 29
-            moves = 0
-        elif pos_com_random == 2 and locations[thief_position].north != 0:
-            thief_position -= 10
-            moves = 0
-        elif pos_com_random == 3 and locations[thief_position].east != 0:
-            thief_position += 1
-            moves = 0
-        elif pos_com_random == 3 and thief_position == 29:
-            thief_position = 50
-            moves = 0
-        elif pos_com_random == 4 and locations[thief_position].south != 0:
-            thief_position += 10
-            moves = 0
-
-        elif pos_com_random == 1 and locations[thief_position].west == 0:
-            break
-        elif pos_com_random == 2 and locations[thief_position].north == 0:
-            break
-        elif pos_com_random == 3 and locations[thief_position].east == 0:
-            break
-        elif pos_com_random == 4 and locations[thief_position].south == 0:
-            break
+        move_thief()
+        moves = 0
