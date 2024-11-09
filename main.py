@@ -42,7 +42,7 @@ __teacher__ = "Mr Giassante"
 from random import randint
 from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
 from places import BOAT_DOCKS, UNDERGROUND_STATIONS
-from functions import greeting, command_help
+from functions import greeting, command_help, print_moving_opportunitys
 from ticket import Ticket
 from color import Color
 
@@ -70,44 +70,6 @@ inhand: Ticket = Ticket(0)
 transition: int  # Only used once TODO maybe there's an alternative
 moves: int = 0
 new_move: bool = True  # Decides if stats are shown
-
-# Shows where the player can go from his current location
-def print_moving_opportunitys() -> None:
-    if locations[player_position].north:
-        print(f"You can go North to {locations[locations[player_position].north]}.")
-    else:
-        print("You cannot go North.")
-    print()
-
-    if locations[player_position].south:
-        print(f"You can go South to {locations[locations[player_position].south]}.")
-    else:
-        print("You cannot go South.")
-    print()
-
-    if locations[player_position].east:
-        print(f"You can go East to {locations[locations[player_position].east]}.")
-    else:
-        print("You cannot go East.")
-    print()
-
-    if locations[player_position].west:
-        print(f"You can go West to {locations[locations[player_position].west]}.")
-    else:
-        print("You cannot go West.")
-    print(Color.PURPLE)
-
-    if locations[player_position].down:
-        print(f"You can go down to {locations[locations[player_position].down]}.")
-    else:
-        print("There is no (other) underground station here.")
-    print()
-
-    if locations[player_position].up:
-        print(f"You can go up to {locations[locations[player_position].up]}.")
-    else:
-        print("You are currently not in an underground station.")
-    print(Color.YELLOW)
 
 def check_winning() -> None:
     if thief_position == player_position:
@@ -375,7 +337,7 @@ def main() -> None:
         # Show status
         if new_move:
             print_positions()
-            print_moving_opportunitys()
+            print_moving_opportunitys(locations[player_position])
             print_relative_positions()
             print_hand_status()
             new_move = False
