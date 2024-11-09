@@ -42,7 +42,7 @@ __teacher__ = "Mr Giassante"
 from random import randint
 from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
 from places import BOAT_DOCKS, UNDERGROUND_STATIONS
-from functions import greeting, command_help, print_moving_opportunitys
+from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions
 from ticket import Ticket
 from color import Color
 
@@ -101,42 +101,6 @@ def print_object_status() -> None:
     elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
         print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket}.")
     print(Color.RESET)
-
-def print_relative_positions() -> None:
-    def coordinate_unpacking(place_value:int) -> tuple[int, int]:
-        # Converting the Value of that place in a tuple with two items
-        first_digit: int
-        second_digit: int
-        # A Value < 10 only has one item. So it can not be converted because a n integer has no unessesery zerros
-        if place_value > 10:
-            place_string: str = str(place_value)
-            first_digit = int(place_string[0])
-            second_digit = int(place_string[1])
-        else:
-            first_digit = 0
-            second_digit = place_value
-        return (first_digit, second_digit)
-
-    player_coordinate: tuple[int, int] = coordinate_unpacking(player_position)
-    thief_coordinate: tuple[int, int] = coordinate_unpacking(thief_position)
-
-    # Comparing the singular coordinates to calucalte the relative direction
-    if player_coordinate[0] < thief_coordinate[0]:
-        print("The thief is more in the South.")
-    elif player_coordinate[0] > thief_coordinate[0]:
-        print("The thief is more in the North.")
-    elif player_coordinate[0] == thief_coordinate[0]:
-        print("The thief is on the same height as you. You are close, try to go West or East.")
-    print()
-
-    if player_coordinate[1] > thief_coordinate[1]:
-        print("The thief is more in the West.")
-    elif player_coordinate[1] < thief_coordinate[1]:
-        print("The thief is more in the East.")
-    elif player_coordinate[1] == thief_coordinate[1]:
-        print("The thief is on the same height as you. You are close, try to go North or South.")
-    print()
-    print(Color.BLUE)
 
 def move_player(direction: str) -> None:
     global locations, player_position
@@ -338,7 +302,7 @@ def main() -> None:
         if new_move:
             print_positions()
             print_moving_opportunitys(locations[player_position])
-            print_relative_positions()
+            print_relative_positions(player_position, thief_position)
             print_hand_status()
             new_move = False
         print_object_status()
