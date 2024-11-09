@@ -29,11 +29,11 @@ Functions:
 
 __title__ = "Adventure Game"
 __author__ = "Lena Weinstock, Paul Jonas Dohle"
-__version__ = "1.8.0"
+__version__ = "1.8.1"
 __status__ = "Production"
 __date__ = "9.11.2024"
 __all__ = ["main"]
-__path__ = "project_adventure_game_introduction_to_python1.5.py"
+__path__ = "main.py"
 __coure__ = "Computer Science ICS 3u"
 __school__ = "Glebe Collegiate Institute, Ottawa; Europagymnaium Warstein"
 __teacher__ = "Mr Giassante"
