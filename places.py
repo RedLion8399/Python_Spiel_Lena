@@ -1,9 +1,70 @@
+"""This module defines locations in a game world, 
+where each location has different attributes such as coordinates, 
+connected locations, and potential objects (e.g., tickets). 
+It provides a way to manage game locations and movement between them. 
+The module also defines various lists of locations that are restricted 
+for the player or thief to start from, and lists for underground stations and boat docks.
+
+Classes:
+    Location: Represents a location in the game world, with attributes for name, 
+    coordinates, connected locations, and if a ticket is at this location.
+
+Variables:
+    locations (list[Location]): A list of all locations in the game world.
+    forbidden_player_starts (list[int]): A list of location indices where 
+    the player is not allowed to start.
+    forbidden_thief_starts (list[int]): A list of location indices where 
+    the thief is not allowed to start.
+    underground_stations (list[int]): A list of location indices where
+    underground stations are located.
+    boat_docks (list[int]): A list of location indices where boat docks are located.
+"""
+
+__all__ = ["Location", "locations", "FORBIDDEN_PLAYER_STARTS", "FORBIDDEN_THIEF_STARTS",
+           "UNDERGROUND_STATIONS", "BOAT_DOCKS"]
+__path__ = "places.py"
+__version__ = "1.0.0"
+
 from random import randint
+from typing import Final
 from ticket import Ticket
 
 
 class Location:
-    def __init__(self, name:str, coordinate:int, objects:bool=True, north:int=0, south:int=0, east:int=0, west:int=0, up:int=0, down:int=0) -> None:
+    """Represents a location in the game world with different attributes
+    and some automated behavior.
+
+    Arguments:
+        name (str): The name of the location.
+        coordinate (int): A unique identifier for the location.
+        
+    Keyword Arguments:
+        object (bool): Indicates whether the location can contain a ticket. Defaults to True.
+        north (int): The index of the location to the north of this one. Defaults to 0.
+        south (int): The index of the location to the south of this one. Defaults to 0.
+        east (int): The index of the location to the east of this one. Defaults to 0.
+        west (int): The index of the location to the west of this one. Defaults to 0.
+        up (int): The index of the location above this one. Defaults to 0.
+        down (int): The index of the location below this one (undergroundstation). Defaults to 0.
+
+    Attributes:
+        ticket (Ticket): A ticket associated with this location.
+    
+    Methods:
+        __repr__: Returns the location name as a string.
+
+    Example:
+        >>> loc = Location("Paddington Station", 1, west=1, up=2, down=3)
+        >>> loc.north
+        0
+        >>> loc
+        "Paddington Station"
+        >>> loc.ticket
+        <Ticket object>
+    """
+
+    def __init__(self, name: str, coordinate: int, objects: bool = True, north: int = 0,
+                 south: int = 0, east: int = 0, west: int = 0, up: int = 0, down: int = 0) -> None:
         self.name: str = name
         self.coordinate: int = coordinate
         self.object: bool = objects
@@ -15,15 +76,28 @@ class Location:
         self.down: int = down
         self.ticket: Ticket
 
-        self.ticket = self._create_Ticket() if objects else Ticket(0)
+        self.ticket = self.__create_Ticket() if objects else Ticket(0)
 
-    def _create_Ticket(self) -> Ticket:
+    def __create_Ticket(self) -> Ticket:
+        """Generates a random ticket with a certain probability.
+
+        This method determines which type of ticket (underground or boat)
+        is assigned to the location, based on random probabilities.
+
+        - 83.3% chance to generate no ticket (ticket type 0).
+        - 16.6% chance to generate an underground ticket (ticket type 1).
+        - 4.16% chance to generate a boat ticket (ticket type 2).
+
+        Returns:
+            Ticket: A randomly generated ticket, either a ticket with type 0 (no ticket),
+                    type 1 (underground ticket), or type 2 (boat ticket).
+        """
+
         if randint(1, 6) != 5:      # The propability for any ticket is about 16,6%
             return Ticket(0)        # The propability for no ticket is about 83,3%
-        if randint(1,4) != 1:       # The conditional propability for a boat ticket if we've alredy got a ticket is 25%
+        if randint(1,4) != 1:       # The conditional propability for a boat ticket is 25%
             return Ticket(1)        # The Total probability for an undergraund-ticket is about 16,6%
-        else:                       #
-            return Ticket(2)        # The total propability for a boat-ticket is about 4,16%s
+        return Ticket(2)            # The total propability for a boat-ticket is about 4,16%s
 
     def __repr__(self) -> str:
         return self.name
@@ -105,7 +179,7 @@ locations = [
     Location("New Cross Road", 69, east=70, west=68),
     Location("New Cross Road", 70, south=80, west=69),
     Location("Paddington Station (underground)", 71, False, north=72, south=78, east=75, up=1),
-    Location("King's Cross Station (underground)", 72, False, north=73, south=78, east=74, west=76, up=6),
+    Location("King's Cross Station (underground)", 72, False, north=73, south=78, east=74,west=76, up=6),
     Location("Tower Hill Station (underground)", 73, False, north=72, west=71, up=17),
     Location("Hyde Park Corner Station (underground)", 74, False, north=72, east=75, up=21),
     Location("Picadilly Circus Station (underground)", 75, False, north=71, south=78, east=72, west=74, up=52),
@@ -117,10 +191,12 @@ locations = [
 ]
 
 # Lists with special places to choose from in the later programm
-forbidden_player_starts: list[int] = [0, 1, 7, 8, 9, 10, 18, 19, 20, 29, 30, 34, 35, 36, 37, 38, 49, 40, 54, 64, 71, 72, 73, 74, 75, 76, 77, 78]
+FORBIDDEN_PLAYER_STARTS: Final[list[int]] = [0, 1, 7, 8, 9, 10, 18, 19, 20, 29, 30, 34, 35, 36, 37,
+                                      38, 49, 40, 54, 64, 71, 72, 73, 74, 75, 76, 77, 78]
 
-forbidden_thief_starts: list[int] = [0, 34, 35, 36, 37, 38, 39, 40, 54, 64, 71, 72, 73, 74, 75, 76, 77, 78]
+FORBIDDEN_THIEF_STARTS: Final[list[int]] = [0, 34, 35, 36, 37, 38, 39, 40, 54,
+                                            64, 71, 72, 73, 74, 75, 76, 77, 78]
 
-underground_stations: list[int] = [71, 72, 73, 74, 75, 76, 77, 78]
+UNDERGROUND_STATIONS: Final[list[int]] = [71, 72, 73, 74, 75, 76, 77, 78]
 
-boat_docks: list[int] = [29, 50]
+BOAT_DOCKS: Final[list[int]] = [29, 50]

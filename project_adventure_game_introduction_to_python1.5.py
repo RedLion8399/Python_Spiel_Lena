@@ -1,40 +1,63 @@
-# Title: Adventure Game
-# Version: 1.7.2
-# Date: October 15, 2024 - November xx, 2024
-#
-# Author: Lena Weinstock
-# Linter: Paul Jonas Dohle
-# Course: Computer Science ICS 3u
-# School: Glebe Collegiate Institute, Ottawa
-# Teacher: Mr Giassante
-#
-# Description: This Python Program creates an immercive adventure
-#               located in London. The players goal is to find a fugitive
-#               criminal while having the possibility to take the underground
-#               and the boat to catch the criminal with the help of so called
-#               "passes" the player needs to find. After two travels, the pass
-#               is not valid anymore and the player needs to switch it with a
-#               new one.
+"""This Python Program creates an immercive adventure 
+located in London. The players goal is to find a fugitive
+criminal while having the possibility to take the underground
+and the boat to catch the criminal with the help of so called
+"passes" the player needs to find. After two travels, the pass
+is not valid anymore and the player needs to switch it with a new one.
+
+Variables:
+    player_position (int): The current position of the player.
+    thief_position (int): The current position of the thief.
+    inhand (Ticket): The ticket the player is holding.
+    command (str): The input of the player.
+    moves (int): Counts the number of moves until the thief moves.
+
+Functions:
+    print_positions: Prints the current position of the player and the thief.
+    print_hand_status: Prints the current ticket the player is holding.
+    check_winning: Checks if the player has won the game.
+    print_moving_opportunity: Prints if the player has the possibility to move.
+    process_input: Processes the input of the player.
+    print_relative_positions: Prints the relative positions of the player and the thief.
+    print_object_status: Prints the status of the ticket.
+    move_player: Moves the player in the wished direction.
+    move_thief: Moves the thief randomly one position.
+    is_undergraund_possible: Checks if the player has the possibility to move by underground.
+    is_boat_possible: Checks if the player has the possibility to move by boat.
+    main: The main function of the program.
+"""
+
+__title__ = "Adventure Game"
+__author__ = "Lena Weinstock, Paul Jonas Dohle"
+__version__ = "1.8.0"
+__status__ = "Production"
+__date__ = "9.11.2024"
+__all__ = ["main"]
+__path__ = "project_adventure_game_introduction_to_python1.5.py"
+__coure__ = "Computer Science ICS 3u"
+__school__ = "Glebe Collegiate Institute, Ottawa; Europagymnaium Warstein"
+__teacher__ = "Mr Giassante"
 
 
 from random import randint
-from places import locations, forbidden_player_starts, forbidden_thief_starts, boat_docks, underground_stations
+from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
+from places import BOAT_DOCKS, UNDERGROUND_STATIONS
 from functions import greeting, command_help
 from ticket import Ticket
-from color import color
+from color import Color
 
 
 # setting beginning variables of player and computer
 
 # Selecting a random point to start with excluding those, who can only reached by underground
 player_position: int = 0  # position at beginning
-while player_position in forbidden_player_starts:
+while player_position in FORBIDDEN_PLAYER_STARTS:
     player_position = randint(1, 80)
 
-forbidden_thief_starts.append(player_position)
+FORBIDDEN_THIEF_STARTS.append(player_position)
 thief_position: int = 0
 
-while thief_position in forbidden_thief_starts:
+while thief_position in FORBIDDEN_THIEF_STARTS:
     thief_position = randint(1, 80)
     while (thief_position + 2 == player_position or thief_position - 2 == player_position):
         thief_position = randint(1, 80)
@@ -72,7 +95,7 @@ def print_moving_opportunitys() -> None:
         print(f"You can go West to {locations[locations[player_position].west]}.")
     else:
         print("You cannot go West.")
-    print(color.PURPLE)
+    print(Color.PURPLE)
 
     if locations[player_position].down:
         print(f"You can go down to {locations[locations[player_position].down]}.")
@@ -84,23 +107,23 @@ def print_moving_opportunitys() -> None:
         print(f"You can go up to {locations[locations[player_position].up]}.")
     else:
         print("You are currently not in an underground station.")
-    print(color.YELLOW)
+    print(Color.YELLOW)
 
 def check_winning() -> None:
     if thief_position == player_position:
-        print(color.RED)
+        print(Color.RED)
         print()
         print("Congratulations! You have successfully caught the thief!")
         print("Good job!")
-        print(color.RESET)
+        print(Color.RESET)
         exit()
 
 def print_positions() -> None:
-    print(color.GREEN)
+    print(Color.GREEN)
     print(f"You are in/on/at {locations[player_position]}.")
     print()
     print(f"The thief is in/on/at {locations[thief_position]}.")
-    print(color.CYAN)
+    print(Color.CYAN)
 
 def print_hand_status() -> None:
     if not inhand.ticket_type:
@@ -115,7 +138,7 @@ def print_object_status() -> None:
         print(f"You can pick-up the: {locations[player_position].ticket}.")
     elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
         print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket}.")
-    print(color.RESET)
+    print(Color.RESET)
 
 def print_relative_positions() -> None:
     def coordinate_unpacking(place_value:int) -> tuple[int, int]:
@@ -131,7 +154,7 @@ def print_relative_positions() -> None:
             first_digit = 0
             second_digit = place_value
         return (first_digit, second_digit)
-    
+
     player_coordinate: tuple[int, int] = coordinate_unpacking(player_position)
     thief_coordinate: tuple[int, int] = coordinate_unpacking(thief_position)
 
@@ -151,7 +174,7 @@ def print_relative_positions() -> None:
     elif player_coordinate[1] == thief_coordinate[1]:
         print("The thief is on the same height as you. You are close, try to go North or South.")
     print()
-    print(color.BLUE)
+    print(Color.BLUE)
 
 def move_player(direction: str) -> None:
     global locations, player_position
@@ -239,7 +262,7 @@ def process_input() -> None:
                 return
             locations[player_position].ticket.ticket_type = inhand.ticket_type
             inhand.ticket_type = 0
-        
+
         case "P":
             if inhand.ticket_type:
                 print("Yo have already an item in your hand.")
@@ -266,7 +289,7 @@ def process_input() -> None:
             print("Good bye! I hope you had fun playing this game!")
             print()
             exit()
-        
+
         case "H":
             command_help()
             return
@@ -278,11 +301,11 @@ def process_input() -> None:
             print()
             print(f"This command is not possible in/on/at {locations[player_position]}. Please try again")
             return
-        
+
     new_move = True
 
 def is_undergraund_possible(direction:str) -> bool:
-    if player_position not in underground_stations:
+    if player_position not in UNDERGROUND_STATIONS:
         return True
     if direction == "UP":
         return True
@@ -295,7 +318,7 @@ def is_undergraund_possible(direction:str) -> bool:
     return False
 
 def is_booat_possible(direction:str) -> bool:
-    if player_position not in boat_docks:
+    if player_position not in BOAT_DOCKS:
         return True
     if not (player_position == 29 and direction == "SOUTH" or player_position == 50 and direction == "NORTH"):
         return True
@@ -328,10 +351,22 @@ def move_thief() -> None:
                 thief_position += 10
         case _:
             pass
-        
 
-# The main programm starts here.
+
 def main() -> None:
+    """Contains the adventure game and controls the main game loop.
+    This function is the entry point of the game. After greeting the player and explaning the basics
+    the programm continues with the main game loop.
+    1. Displays the player's current position, available movement options, and ticket status.
+    2. Prompts the player for input and processes the command via `process_input()`.
+    3. Checks if the player has won by catching the thief using `check_winning()`.
+    4. Tracks the thief's movement every three player turns.
+    
+    The loop continues until the player either catches the thief or quits the game.
+
+    Example:
+    >>> main()
+    """
     global new_move, command, moves
     greeting()
     command_help()
