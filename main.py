@@ -43,6 +43,7 @@ from random import randint
 from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
 from places import BOAT_DOCKS, UNDERGROUND_STATIONS
 from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions
+from functions import check_winning
 from ticket import Ticket
 from color import Color
 
@@ -70,15 +71,6 @@ inhand: Ticket = Ticket(0)
 transition: int  # Only used once TODO maybe there's an alternative
 moves: int = 0
 new_move: bool = True  # Decides if stats are shown
-
-def check_winning() -> None:
-    if thief_position == player_position:
-        print(Color.RED)
-        print()
-        print("Congratulations! You have successfully caught the thief!")
-        print("Good job!")
-        print(Color.RESET)
-        exit()
 
 def print_positions() -> None:
     print(Color.GREEN)
@@ -312,7 +304,7 @@ def main() -> None:
         print()
 
         process_input()
-        check_winning()
+        check_winning(player_position, thief_position)
 
         # Every three player_moves the thief moves one location
         if new_move:

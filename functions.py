@@ -8,6 +8,11 @@ Functions:
     greeting: Prints a welcome message and gives a brief game description.
     command_help: Lists all available commands for the player to navigate through the game.
 """
+__all__ = ["greeting", "command_help", "print_moving_opportunitys", "print_relative_positions",
+           "check_winning"]
+__path__ = "functions.py"
+__version__ = "1.0.0"
+
 from color import Color
 from places import Location
 
@@ -159,3 +164,22 @@ def print_relative_positions(player_position: int, thief_position: int) -> None:
         print("The thief is on the same height as you. You are close, try to go North or South.")
     print()
     print(Color.BLUE)
+
+def check_winning(player_position: int, thief_position: int) -> None:
+    """Checks if the player has won the game by catching the thief.
+
+    This function compares the player's and the thief's positions. If they match, it 
+    prints a congratulatory message in red to indicate the player's success in catching 
+    the thief and then exits the program. Otherwise, the game continues.
+
+    Args:
+        player_position (int): The current position of the player as a grid index.
+        thief_position (int): The current position of the thief as a grid index.
+    """
+    if player_position == thief_position:
+        print(Color.RED)
+        print()
+        print("Congratulations! You have successfully caught the thief!")
+        print("Good job!")
+        print(Color.RESET)
+        exit()
