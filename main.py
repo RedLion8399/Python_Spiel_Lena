@@ -9,16 +9,16 @@ Variables:
     player_position (int): The current position of the player.
     thief_position (int): The current position of the thief.
     inhand (Ticket): The ticket the player is holding.
-    command (str): The input of the player.
+    command (str): The player's input command.
     moves (int): Counts the number of moves until the thief moves.
 
 Functions:
-    main: The main function of the program.
+    main: The main function that initializes and runs the game loop.
 """
 
 __title__ = "Adventure Game"
 __author__ = "Lena Weinstock, Paul Jonas Dohle"
-__version__ = "1.9.1"
+__version__ = "2.0.0"
 __status__ = "Production"
 __date__ = "9.11.2024"
 __all__ = ["main"]
@@ -37,45 +37,45 @@ from functions import process_input
 from ticket import Ticket
 
 
-# setting beginning variables of player and computer
-
-# Selecting a random point to start with excluding those, who can only reached by underground
-player_position: int = 0  # position at beginning
-while player_position in FORBIDDEN_PLAYER_STARTS:
-    player_position = randint(1, 80)
-
-FORBIDDEN_THIEF_STARTS.append(player_position)
-thief_position: int = 0
-
-while thief_position in FORBIDDEN_THIEF_STARTS:
-    thief_position = randint(1, 80)
-    while (thief_position + 2 == player_position or thief_position - 2 == player_position):
-        thief_position = randint(1, 80)
-    while (thief_position + 20 == player_position or thief_position - 20 == player_position):
-        thief_position = randint(1, 80)
-
-# defining some variables for later
-command: str = " " # TODO Design an own dada Type
-inhand: Ticket = Ticket(0)
-moves: int = 0
-new_move: bool = True  # Decides if stats are shown
-
-
 def main() -> None:
     """Contains the adventure game and controls the main game loop.
     This function is the entry point of the game. After greeting the player and explaning the basics
     the programm continues with the main game loop.
-    1. Displays the player's current position, available movement options, and ticket status.
-    2. Prompts the player for input and processes the command via `process_input()`.
-    3. Checks if the player has won by catching the thief using `check_winning()`.
-    4. Tracks the thief's movement every three player turns.
+
+    1. Sets the initial positions of the player and the thief and declares the game variables.
+    2. Displays the player's current position, available movement options, and ticket status.
+    3. Prompts the player for input and processes the command via `process_input()`.
+    4. Checks if the player has won by catching the thief using `check_winning()`.
+    5. Tracks the thief's movement every three player turns.
     
     The loop continues until the player either catches the thief or quits the game.
 
     Example:
     >>> main()
     """
-    global new_move, command, moves, inhand, player_position, thief_position
+
+    command: str = " "      # TODO Design an own dada Type
+    inhand: Ticket = Ticket(0)
+    moves: int = 0
+    new_move: bool = True  # Decides if stats are shown
+    thief_position: int = 0
+    player_position: int = 0
+
+    # setting beginning variables of player and computer
+    # Selecting a random point to start with excluding those, who can only reached by underground
+    while player_position in FORBIDDEN_PLAYER_STARTS:
+        player_position = randint(1, 80)
+
+    FORBIDDEN_THIEF_STARTS.append(player_position)
+
+    while thief_position in FORBIDDEN_THIEF_STARTS:
+        thief_position = randint(1, 80)
+        while (thief_position + 2 == player_position or thief_position - 2 == player_position):
+            thief_position = randint(1, 80)
+        while (thief_position + 20 == player_position or thief_position - 20 == player_position):
+            thief_position = randint(1, 80)
+
+
     greeting()
     command_help()
 
