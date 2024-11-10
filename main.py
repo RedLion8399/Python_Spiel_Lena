@@ -29,7 +29,7 @@ Functions:
 
 __title__ = "Adventure Game"
 __author__ = "Lena Weinstock, Paul Jonas Dohle"
-__version__ = "1.8.2"
+__version__ = "1.8.3"
 __status__ = "Production"
 __date__ = "9.11.2024"
 __all__ = ["main"]
@@ -43,9 +43,8 @@ from random import randint
 from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
 from places import BOAT_DOCKS, UNDERGROUND_STATIONS
 from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions
-from functions import check_winning, print_hand_status, print_positions
+from functions import check_winning, print_hand_status, print_positions, print_object_status
 from ticket import Ticket
-from color import Color
 
 
 # setting beginning variables of player and computer
@@ -71,13 +70,6 @@ inhand: Ticket = Ticket(0)
 transition: int  # Only used once # TODO maybe there's an alternative
 moves: int = 0
 new_move: bool = True  # Decides if stats are shown
-
-def print_object_status() -> None:
-    if (locations[player_position].ticket.ticket_type and not inhand.ticket_type):
-        print(f"You can pick-up the: {locations[player_position].ticket}.")
-    elif (locations[player_position].ticket.ticket_type and inhand.ticket_type):
-        print(f"You can switch the: {inhand} with a/an {locations[player_position].ticket}.")
-    print(Color.RESET)
 
 def move_player(direction: str) -> None:
     global locations, player_position
@@ -282,7 +274,7 @@ def main() -> None:
             print_relative_positions(player_position, thief_position)
             print_hand_status(inhand)
             new_move = False
-        print_object_status()
+        print_object_status(locations[player_position], inhand)
 
         # Asking user to input a command
         command = input("select a command out of the list above: ").upper()

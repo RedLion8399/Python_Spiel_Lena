@@ -9,9 +9,9 @@ Functions:
     command_help: Lists all available commands for the player to navigate through the game.
 """
 __all__ = ["greeting", "command_help", "print_moving_opportunitys", "print_relative_positions",
-           "check_winning", "print_hand_status"]
+           "check_winning", "print_hand_status", "print_positions", "print_object_status",]
 __path__ = "functions.py"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 from color import Color
 from places import Location
@@ -221,3 +221,21 @@ def print_positions(player_position: int, thief_position: int) -> None:
     print()
     print(f"The thief is in/on/at {thief_position}.")
     print(Color.CYAN)
+
+def print_object_status(player_position: Location, inhand: Ticket) -> None:
+    """Displays if the player is possible to pick up a tickit or switch it if he's currently holding one.
+
+    Based on the player's current location and whether they are holding a ticket, this 
+    function informs the player if they can pick up a new ticket or switch their 
+    current ticket with one available at the location.
+
+    Args:
+        player_position (Location): The current position of the player as a grid index.
+        inhand (Ticket): The ticket currently held by the player, he's always holding 
+        a tickit but if the `ticket_type = 0`, its equel to the empty hand.
+    """
+    if (player_position.ticket.ticket_type and not inhand.ticket_type):
+        print(f"You can pick-up the: {player_position.ticket}.")
+    elif (player_position.ticket.ticket_type and inhand.ticket_type):
+        print(f"You can switch the: {inhand} with a/an {player_position.ticket}.")
+    print(Color.RESET)
