@@ -29,7 +29,7 @@ Functions:
 
 __title__ = "Adventure Game"
 __author__ = "Lena Weinstock, Paul Jonas Dohle"
-__version__ = "1.8.1"
+__version__ = "1.8.2"
 __status__ = "Production"
 __date__ = "9.11.2024"
 __all__ = ["main"]
@@ -43,7 +43,7 @@ from random import randint
 from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
 from places import BOAT_DOCKS, UNDERGROUND_STATIONS
 from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions
-from functions import check_winning
+from functions import check_winning, print_hand_status, print_positions
 from ticket import Ticket
 from color import Color
 
@@ -66,26 +66,11 @@ while thief_position in FORBIDDEN_THIEF_STARTS:
         thief_position = randint(1, 80)
 
 # defining some variables for later
-command: str = " "
+command: str = " " # TODO Design an own dada Type
 inhand: Ticket = Ticket(0)
-transition: int  # Only used once TODO maybe there's an alternative
+transition: int  # Only used once # TODO maybe there's an alternative
 moves: int = 0
 new_move: bool = True  # Decides if stats are shown
-
-def print_positions() -> None:
-    print(Color.GREEN)
-    print(f"You are in/on/at {locations[player_position]}.")
-    print()
-    print(f"The thief is in/on/at {locations[thief_position]}.")
-    print(Color.CYAN)
-
-def print_hand_status() -> None:
-    if not inhand.ticket_type:
-        print("You have currently nothing in your hand.")
-    else:
-        print(f"You are currently in possession of a/an {inhand}.")
-    print()
-    print()
 
 def print_object_status() -> None:
     if (locations[player_position].ticket.ticket_type and not inhand.ticket_type):
@@ -292,10 +277,10 @@ def main() -> None:
     while True:
         # Show status
         if new_move:
-            print_positions()
+            print_positions(player_position, thief_position)
             print_moving_opportunitys(locations[player_position])
             print_relative_positions(player_position, thief_position)
-            print_hand_status()
+            print_hand_status(inhand)
             new_move = False
         print_object_status()
 

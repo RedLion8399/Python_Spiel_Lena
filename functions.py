@@ -9,12 +9,13 @@ Functions:
     command_help: Lists all available commands for the player to navigate through the game.
 """
 __all__ = ["greeting", "command_help", "print_moving_opportunitys", "print_relative_positions",
-           "check_winning"]
+           "check_winning", "print_hand_status"]
 __path__ = "functions.py"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 from color import Color
 from places import Location
+from ticket import Ticket
 
 def greeting() -> None:
     """Prints a welcome message to the player and provides a brief 
@@ -183,3 +184,40 @@ def check_winning(player_position: int, thief_position: int) -> None:
         print("Good job!")
         print(Color.RESET)
         exit()
+
+def print_hand_status(inhand: Ticket) -> None:
+    """Displays if the player is holding a valid tickit.
+
+    This function checks if the player is holding a ticket. If the player has 
+    no ticket in hand, it prints a message indicating an empty hand. Otherwise, 
+    it displays the type of ticket the player is currently holding.
+
+    (The player always has one ticket in hand but if the `ticket_type = 0`,
+    its equel to the empty hand.)
+
+    Args:
+        inhand (Ticket): The ticket object representing the item currently held 
+        by the player.
+    """
+    if not inhand.ticket_type:
+        print("You have currently nothing in your hand.")
+    else:
+        print(f"You are currently in possession of a/an {inhand}.")
+    print()
+    print()
+
+def print_positions(player_position: int, thief_position: int) -> None:
+    """Displays the current locations of the player and the thief.
+
+    This function outputs the player's current position and the thief's position
+    in the game environment. It uses color formatting to differentiate the output.
+
+    Args:
+        player_position (int): The current position of the player as a grid index.
+        thief_position (int): The current position of the thief as a grid index.
+    """
+    print(Color.GREEN)
+    print(f"You are in/on/at {player_position}.")
+    print()
+    print(f"The thief is in/on/at {thief_position}.")
+    print(Color.CYAN)
