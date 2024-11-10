@@ -45,7 +45,6 @@ from functions import greeting, command_help, print_moving_opportunitys, print_r
 from functions import check_winning, print_hand_status, print_positions, print_object_status
 from movement import move_player
 from ticket import Ticket
-from icecream import ic
 
 
 # setting beginning variables of player and computer
@@ -188,7 +187,6 @@ def main() -> None:
         # Show status
         if new_move:
             print_positions(player_position, thief_position)
-            ic(player_position)
             print_moving_opportunitys(locations[player_position])
             print_relative_positions(player_position, thief_position)
             print_hand_status(inhand)
@@ -198,10 +196,8 @@ def main() -> None:
         # Asking user to input a command
         command = input("select a command out of the list above: ").upper()
         print()
-        ic(command)
 
         process_input()
-        print("finished")
         check_winning(player_position, thief_position)
 
         # Every three player_moves the thief moves one location

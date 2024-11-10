@@ -7,7 +7,6 @@ __version__ = "1.0.0"
 
 from places import BOAT_DOCKS, UNDERGROUND_STATIONS, Location
 from ticket import Ticket
-from icecream import ic
 
 
 def move_player(player_position: Location, direction: str, inhand: Ticket) -> int:
@@ -43,47 +42,35 @@ def move_player(player_position: Location, direction: str, inhand: Ticket) -> in
         case "NORTH":
             if not player_position.north:
                 print(f"At {player_position} you can not go north.")
-                ic(player_position.coordinate)
                 return player_position.coordinate
             if not (is_undergraund_possible(player_position.coordinate, inhand) and
             is_booat_possible(direction, player_position.coordinate, inhand)):
-                ic(player_position.coordinate)
                 return player_position.coordinate
-            ic(player_position.north)
             return player_position.north
 
         case "EAST":
             if not player_position.east:
                 print(f"At {player_position} you can not go east.")
-                ic(player_position.coordinate)
                 return player_position.coordinate
             if not is_undergraund_possible(player_position.coordinate, inhand):
-                ic(player_position.coordinate)
                 return player_position.coordinate
-            ic(player_position.east)
             return player_position.east
 
         case "SOUTH":
             if not player_position.south:
                 print(f"At {player_position} you can not go south.")
-                ic(player_position.coordinate)
                 return player_position.coordinate
             if not (is_undergraund_possible(player_position.coordinate, inhand) and
             is_booat_possible(direction, player_position.coordinate, inhand)):
-                ic(player_position.coordinate)
                 return player_position.coordinate
-            ic(player_position.south)
             return player_position.south
 
         case "WEST":
             if not player_position.west:
                 print(f"At {player_position} you can not go west.")
-                ic(player_position.coordinate)
                 return player_position.coordinate
             if not is_undergraund_possible(player_position.coordinate, inhand):
-                ic(player_position.coordinate)
                 return player_position.coordinate
-            ic(player_position.west)
             return player_position.west
 
         case "UP":
@@ -126,7 +113,6 @@ def is_undergraund_possible(player_position: int, inhand: Ticket) -> bool:
     """
     if player_position not in UNDERGROUND_STATIONS:
         return True
-    ic(inhand.vehicle)
     if inhand.vehicle == "UNDERGROUND":
         # This partis only executed if the player is traveling with the underground
         inhand.use_ticket()

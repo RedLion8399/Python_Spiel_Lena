@@ -223,7 +223,8 @@ def print_positions(player_position: int, thief_position: int) -> None:
     print(Color.CYAN)
 
 def print_object_status(player_position: Location, inhand: Ticket) -> None:
-    """Displays if the player is possible to pick up a tickit or switch it if he's currently holding one.
+    """Displays if the player is possible to pick up a tickit
+    or switch it if he's currently holding one.
 
     Based on the player's current location and whether they are holding a ticket, this 
     function informs the player if they can pick up a new ticket or switch their 
