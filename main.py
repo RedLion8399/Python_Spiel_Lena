@@ -41,10 +41,11 @@ __teacher__ = "Mr Giassante"
 
 from random import randint
 from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
-from places import BOAT_DOCKS, UNDERGROUND_STATIONS
 from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions
 from functions import check_winning, print_hand_status, print_positions, print_object_status
+from movement import move_player
 from ticket import Ticket
+from icecream import ic
 
 
 # setting beginning variables of player and computer
@@ -71,82 +72,27 @@ transition: int  # Only used once # TODO maybe there's an alternative
 moves: int = 0
 new_move: bool = True  # Decides if stats are shown
 
-def move_player(direction: str) -> None:
-    global locations, player_position
-
-    match direction:
-        case "NORTH":
-            if not locations[player_position].north:
-                print(f"At {locations[player_position]} you can not go north.")
-                return
-            if not is_undergraund_possible(direction):
-                return
-            if not is_booat_possible(direction):
-                return
-            player_position = locations[player_position].north
-
-        case "EAST":
-            if not locations[player_position].east:
-                print(f"At {locations[player_position]} you can not go east.")
-                return
-            if not is_undergraund_possible(direction):
-                return
-            player_position = locations[player_position].east
-
-        case "SOUTH":
-            if not locations[player_position].south:
-                print(f"At {locations[player_position]} you can not go south.")
-                return
-            if not is_undergraund_possible(direction):
-                return
-            if not is_booat_possible(direction):
-                return
-            player_position = locations[player_position].south
-
-        case "WEST":
-            if not locations[player_position].west:
-                print(f"At {locations[player_position]} you can not go west.")
-                return
-            if not is_undergraund_possible(direction):
-                return
-            player_position = locations[player_position].west
-
-        case "UP":
-            if not locations[player_position].up:
-                print(f"At {locations[player_position]} you can not go up.")
-                return
-            player_position = locations[player_position].up
-
-        case "DOWN":
-            if not locations[player_position].down:
-                print(f"At {locations[player_position]} you can not go down.")
-                return
-            player_position = locations[player_position].down
-
-        case _:
-            raise ValueError("Input unknown movement direction. Please reoprt this to the author.")
-
 def process_input() -> None:
-    global command, inhand, transition, new_move
+    global command, inhand, transition, new_move, player_position
 
     match command:
         case "N":
-            move_player("NORTH")
+            player_position = move_player(locations[player_position], "NORTH", inhand)
 
         case "E":
-            move_player("EAST")
+            player_position = move_player(locations[player_position],"EAST", inhand)
 
         case "S":
-            move_player("SOUTH")
+            player_position = move_player(locations[player_position],"SOUTH", inhand)
 
         case "W":
-            move_player("WEST")
+            player_position = move_player(locations[player_position],"WEST", inhand)
 
         case "U":
-            move_player("UP")
+            player_position = move_player(locations[player_position],"UP", inhand)
 
         case "D":
-            move_player("DOWN")
+            player_position = move_player(locations[player_position],"DOWN", inhand)
 
         case "X":
             if not inhand.ticket_type:
@@ -155,7 +101,7 @@ def process_input() -> None:
             if locations[player_position].ticket.ticket_type:
                 print("There is already a ticket on the ground.")
                 return
-            locations[player_position].ticket.ticket_type = inhand.ticket_type
+            locations[player_position].ticket, inhand = inhand, locations[player_position].ticket
             inhand.ticket_type = 0
 
         case "P":
@@ -165,8 +111,7 @@ def process_input() -> None:
             if not locations[player_position].ticket.ticket_type:
                 print("There is no ticket on the ground.")
                 return
-            inhand.ticket_type = locations[player_position].ticket.ticket_type
-            locations[player_position].ticket.ticket_type = 0
+            locations[player_position].ticket, inhand = inhand, locations[player_position].ticket
 
         case "K":
             if not locations[player_position].ticket.ticket_type:
@@ -175,9 +120,7 @@ def process_input() -> None:
             if not inhand.ticket_type:
                 print("Yo have no item in your hand.")
                 return
-            transition = inhand.ticket_type
-            inhand.ticket_type = locations[player_position].ticket.ticket_type
-            locations[player_position].ticket.ticket_type = transition
+            locations[player_position].ticket, inhand = inhand, locations[player_position].ticket
 
         case "Q":
             print()
@@ -194,36 +137,11 @@ def process_input() -> None:
             print()
             print()
             print()
-            print(f"This command is not possible in/on/at {locations[player_position]}. Please try again")
+            print(f"""This command is not possible in/on/at {locations[player_position]}.
+                  Please try again""")
             return
 
     new_move = True
-
-def is_undergraund_possible(direction:str) -> bool:
-    if player_position not in UNDERGROUND_STATIONS:
-        return True
-    if direction == "UP":
-        return True
-    if inhand.vehicle == "UNDERGROUND":
-        # This partis only executed if the player is traveling with the underground
-        inhand.use_ticket()
-        return True
-    # This partis only executed if the player tyest to take the underground without a valid ticket
-    print("You can not take the underground without a valid ticket.")
-    return False
-
-def is_booat_possible(direction:str) -> bool:
-    if player_position not in BOAT_DOCKS:
-        return True
-    if not (player_position == 29 and direction == "SOUTH" or player_position == 50 and direction == "NORTH"):
-        return True
-    if inhand.vehicle == "BOAT":
-        # This partis only executed if the player is traveling with the boat
-        inhand.use_ticket()
-        return True
-    # This partis only executed if the player tyest to take the boat without a valid ticket
-    print("You can not take the boat without a valid ticket.")
-    return False
 
 def move_thief() -> None:
     global thief_position
@@ -270,6 +188,7 @@ def main() -> None:
         # Show status
         if new_move:
             print_positions(player_position, thief_position)
+            ic(player_position)
             print_moving_opportunitys(locations[player_position])
             print_relative_positions(player_position, thief_position)
             print_hand_status(inhand)
@@ -279,8 +198,10 @@ def main() -> None:
         # Asking user to input a command
         command = input("select a command out of the list above: ").upper()
         print()
+        ic(command)
 
         process_input()
+        print("finished")
         check_winning(player_position, thief_position)
 
         # Every three player_moves the thief moves one location

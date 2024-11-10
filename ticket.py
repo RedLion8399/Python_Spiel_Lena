@@ -42,8 +42,13 @@ class Ticket:
         self.ticket_type: int = ticket_type
         self.left_uses: int = 2
         self.vehicle: str
-
-        self.vehicle = "UNDERGROUND" if self.ticket_type == 1 else "BOAT"
+        
+        if self.ticket_type in [1, 3]:
+            self.vehicle = "UNDERGROUND"
+        elif self.ticket_type in [2, 4]:
+            self.vehicle = "BOAT"
+        else:
+            self.vehicle = ""
 
 
     def use_ticket(self) -> None:

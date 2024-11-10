@@ -14,7 +14,7 @@ __path__ = "functions.py"
 __version__ = "1.0.2"
 
 from color import Color
-from places import Location
+from places import Location, locations
 from ticket import Ticket
 
 def greeting() -> None:
@@ -67,7 +67,7 @@ def command_help() -> None:
     print("[H] to show this help again")
     print(" ")
 
-def print_moving_opportunitys(location : Location) -> None:
+def print_moving_opportunitys(location: Location) -> None:
     """Displays the available movement options from the current location.
 
     This function prints the available directions the player can move from the given 
@@ -81,37 +81,37 @@ def print_moving_opportunitys(location : Location) -> None:
         to adjacent locations in each direction.
     """
     if location.north:
-        print(f"You can go North to {location.north}.")
+        print(f"You can go North to {locations[location.north]}.")
     else:
         print("You cannot go North.")
     print()
 
     if location.south:
-        print(f"You can go South to {location.south}.")
+        print(f"You can go South to {locations[location.south]}.")
     else:
         print("You cannot go South.")
     print()
 
     if location.east:
-        print(f"You can go East to {location.east}.")
+        print(f"You can go East to {locations[location.east]}.")
     else:
         print("You cannot go East.")
     print()
 
     if location.west:
-        print(f"You can go West to {location.west}.")
+        print(f"You can go West to {locations[location.west]}.")
     else:
         print("You cannot go West.")
     print(Color.PURPLE)
 
     if location.down:
-        print(f"You can go down to {location.down}.")
+        print(f"You can go down to {locations[location.down]}.")
     else:
         print("There is no (other) underground station here.")
     print()
 
     if location.up:
-        print(f"You can go up to {location.up}.")
+        print(f"You can go up to {locations[location.up]}.")
     else:
         print("You are currently not in an underground station.")
     print(Color.YELLOW)
@@ -217,9 +217,9 @@ def print_positions(player_position: int, thief_position: int) -> None:
         thief_position (int): The current position of the thief as a grid index.
     """
     print(Color.GREEN)
-    print(f"You are in/on/at {player_position}.")
+    print(f"You are in/on/at {locations[player_position]}.")
     print()
-    print(f"The thief is in/on/at {thief_position}.")
+    print(f"The thief is in/on/at {locations[thief_position]}.")
     print(Color.CYAN)
 
 def print_object_status(player_position: Location, inhand: Ticket) -> None:

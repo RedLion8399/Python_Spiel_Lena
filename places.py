@@ -192,7 +192,7 @@ locations = [
 
 # Lists with special places to choose from in the later programm
 FORBIDDEN_PLAYER_STARTS: Final[list[int]] = [0, 1, 7, 8, 9, 10, 18, 19, 20, 29, 30, 34, 35, 36, 37,
-                                      38, 49, 40, 54, 64, 71, 72, 73, 74, 75, 76, 77, 78]
+                                      38, 39, 49, 40, 54, 64, 71, 72, 73, 74, 75, 76, 77, 78]
 
 FORBIDDEN_THIEF_STARTS: Final[list[int]] = [0, 34, 35, 36, 37, 38, 39, 40, 54,
                                             64, 71, 72, 73, 74, 75, 76, 77, 78]
