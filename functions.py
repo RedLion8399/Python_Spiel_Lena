@@ -7,6 +7,13 @@ welcoming the player or displaying instructions.
 Functions:
     greeting: Prints a welcome message and gives a brief game description.
     command_help: Lists all available commands for the player to navigate through the game.
+    print_positions: Prints the current position of the player and the thief.
+    print_hand_status: Prints the current ticket the player is holding.
+    check_winning: Checks if the player has won the game.
+    print_moving_opportunity: Prints if the player has the possibility to move.
+    process_input: Processes the input of the player.
+    print_relative_positions: Prints the relative positions of the player and the thief.
+    print_object_status: Prints the status of the ticket.
 """
 __all__ = ["greeting", "command_help", "print_moving_opportunitys", "print_relative_positions",
            "check_winning", "print_hand_status", "print_positions", "print_object_status",

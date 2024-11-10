@@ -13,23 +13,12 @@ Variables:
     moves (int): Counts the number of moves until the thief moves.
 
 Functions:
-    print_positions: Prints the current position of the player and the thief.
-    print_hand_status: Prints the current ticket the player is holding.
-    check_winning: Checks if the player has won the game.
-    print_moving_opportunity: Prints if the player has the possibility to move.
-    process_input: Processes the input of the player.
-    print_relative_positions: Prints the relative positions of the player and the thief.
-    print_object_status: Prints the status of the ticket.
-    move_player: Moves the player in the wished direction.
-    move_thief: Moves the thief randomly one position.
-    is_undergraund_possible: Checks if the player has the possibility to move by underground.
-    is_boat_possible: Checks if the player has the possibility to move by boat.
     main: The main function of the program.
 """
 
 __title__ = "Adventure Game"
 __author__ = "Lena Weinstock, Paul Jonas Dohle"
-__version__ = "1.9.0"
+__version__ = "1.9.1"
 __status__ = "Production"
 __date__ = "9.11.2024"
 __all__ = ["main"]
@@ -40,9 +29,11 @@ __teacher__ = "Mr Giassante"
 
 
 from random import randint
+from movement import move_thief
 from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
-from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions, process_input
+from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions
 from functions import check_winning, print_hand_status, print_positions, print_object_status
+from functions import process_input
 from ticket import Ticket
 
 
@@ -66,31 +57,8 @@ while thief_position in FORBIDDEN_THIEF_STARTS:
 # defining some variables for later
 command: str = " " # TODO Design an own dada Type
 inhand: Ticket = Ticket(0)
-transition: int  # Only used once # TODO maybe there's an alternative
 moves: int = 0
 new_move: bool = True  # Decides if stats are shown
-
-def move_thief() -> None:
-    global thief_position
-    match randint(1, 5):
-        case 1:
-            if locations[thief_position].west:
-                thief_position -= 1
-        case 2:
-            if thief_position == 50:
-                thief_position = 29
-            elif locations[thief_position].north:
-                thief_position -= 10
-        case 3:
-            if thief_position == 29:
-                thief_position = 50
-            elif locations[thief_position].east:
-                thief_position += 1
-        case 4:
-            if locations[thief_position].south:
-                thief_position += 10
-        case _:
-            pass
 
 
 def main() -> None:
@@ -107,7 +75,7 @@ def main() -> None:
     Example:
     >>> main()
     """
-    global new_move, command, moves, inhand, player_position
+    global new_move, command, moves, inhand, player_position, thief_position
     greeting()
     command_help()
 
@@ -133,7 +101,7 @@ def main() -> None:
         if new_move:
             moves += 1
         if moves == 3:
-            move_thief()
+            thief_position = move_thief(locations[thief_position])
             moves = 0
 
 

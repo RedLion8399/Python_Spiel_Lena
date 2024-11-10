@@ -1,10 +1,19 @@
-"""_summary_
+"""This module handles the movement functionality for the player and thief characters in the game,
+providing directional movement, underground and boat travel validation, and random movement
+for the thief.
+
+    Functions:
+    move_player: Moves the player in the wished direction.
+    move_thief: Moves the thief randomly one position.
+    is_undergraund_possible: Checks if the player has the possibility to move by underground.
+    is_boat_possible: Checks if the player has the possibility to move by boat.
 """
 
-__all__ = ["move_player"]
+__all__ = ["move_player", "is_undergraund_possible", "is_booat_possible", "move_thief"]
 __path__ = "movement.py"
-__version__ = "1.0.0"
+__version__ = "1.1.1"
 
+from random import randint
 from places import BOAT_DOCKS, UNDERGROUND_STATIONS, Location
 from ticket import Ticket
 
@@ -158,3 +167,40 @@ def is_booat_possible(direction:str, player_position: int, inhand: Ticket) -> bo
     # This partis only executed if the player tyest to take the boat without a valid ticket
     print("You can not take the boat without a valid ticket.")
     return False
+
+def move_thief(thief_position: Location) -> int:
+    """Moves the thief randomly in one of four directions if possible or let him use the boat.
+
+    Args:
+        thief_position (Location): The thief's current location.
+
+    Returns:
+        int: The coordinate of the new position of the thief.
+    
+    Example:
+        >>> thief_position = Location(50)
+        >>> thief_position.coordinate = move_thief(thief_position)
+        >>> 29
+    """
+
+    match randint(1, 5):
+        case 1:
+            if thief_position.west:
+                thief_position.coordinate -= 1
+        case 2:
+            if thief_position.coordinate == 50:
+                thief_position.coordinate = 29
+            elif thief_position.north:
+                thief_position.coordinate -= 10
+        case 3:
+            if thief_position.coordinate == 29:
+                thief_position.coordinate = 50
+            elif thief_position.east:
+                thief_position.coordinate += 1
+        case 4:
+            if thief_position.south:
+                thief_position.coordinate += 10
+        case _:
+            pass
+
+    return thief_position.coordinate
