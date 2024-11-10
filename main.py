@@ -29,7 +29,7 @@ Functions:
 
 __title__ = "Adventure Game"
 __author__ = "Lena Weinstock, Paul Jonas Dohle"
-__version__ = "1.8.3"
+__version__ = "1.9.0"
 __status__ = "Production"
 __date__ = "9.11.2024"
 __all__ = ["main"]
@@ -41,9 +41,8 @@ __teacher__ = "Mr Giassante"
 
 from random import randint
 from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
-from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions
+from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions, process_input
 from functions import check_winning, print_hand_status, print_positions, print_object_status
-from movement import move_player
 from ticket import Ticket
 
 
@@ -70,77 +69,6 @@ inhand: Ticket = Ticket(0)
 transition: int  # Only used once # TODO maybe there's an alternative
 moves: int = 0
 new_move: bool = True  # Decides if stats are shown
-
-def process_input() -> None:
-    global command, inhand, transition, new_move, player_position
-
-    match command:
-        case "N":
-            player_position = move_player(locations[player_position], "NORTH", inhand)
-
-        case "E":
-            player_position = move_player(locations[player_position],"EAST", inhand)
-
-        case "S":
-            player_position = move_player(locations[player_position],"SOUTH", inhand)
-
-        case "W":
-            player_position = move_player(locations[player_position],"WEST", inhand)
-
-        case "U":
-            player_position = move_player(locations[player_position],"UP", inhand)
-
-        case "D":
-            player_position = move_player(locations[player_position],"DOWN", inhand)
-
-        case "X":
-            if not inhand.ticket_type:
-                print("Yo have no item in your hand.")
-                return
-            if locations[player_position].ticket.ticket_type:
-                print("There is already a ticket on the ground.")
-                return
-            locations[player_position].ticket, inhand = inhand, locations[player_position].ticket
-            inhand.ticket_type = 0
-
-        case "P":
-            if inhand.ticket_type:
-                print("Yo have already an item in your hand.")
-                return
-            if not locations[player_position].ticket.ticket_type:
-                print("There is no ticket on the ground.")
-                return
-            locations[player_position].ticket, inhand = inhand, locations[player_position].ticket
-
-        case "K":
-            if not locations[player_position].ticket.ticket_type:
-                print("There is no ticket on the ground.")
-                return
-            if not inhand.ticket_type:
-                print("Yo have no item in your hand.")
-                return
-            locations[player_position].ticket, inhand = inhand, locations[player_position].ticket
-
-        case "Q":
-            print()
-            print("Good bye! I hope you had fun playing this game!")
-            print()
-            exit()
-
-        case "H":
-            command_help()
-            return
-
-        case _:
-            print()
-            print()
-            print()
-            print()
-            print(f"""This command is not possible in/on/at {locations[player_position]}.
-                  Please try again""")
-            return
-
-    new_move = True
 
 def move_thief() -> None:
     global thief_position
@@ -179,7 +107,7 @@ def main() -> None:
     Example:
     >>> main()
     """
-    global new_move, command, moves
+    global new_move, command, moves, inhand, player_position
     greeting()
     command_help()
 
@@ -197,7 +125,8 @@ def main() -> None:
         command = input("select a command out of the list above: ").upper()
         print()
 
-        process_input()
+        player_position, locations[player_position].ticket, inhand, new_move = process_input(
+            command, inhand, locations[player_position])
         check_winning(player_position, thief_position)
 
         # Every three player_moves the thief moves one location

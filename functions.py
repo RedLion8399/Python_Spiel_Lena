@@ -9,11 +9,13 @@ Functions:
     command_help: Lists all available commands for the player to navigate through the game.
 """
 __all__ = ["greeting", "command_help", "print_moving_opportunitys", "print_relative_positions",
-           "check_winning", "print_hand_status", "print_positions", "print_object_status",]
+           "check_winning", "print_hand_status", "print_positions", "print_object_status",
+           "process_input"]
 __path__ = "functions.py"
-__version__ = "1.0.2"
+__version__ = "1.1.0"
 
 from color import Color
+from movement import move_player
 from places import Location, locations
 from ticket import Ticket
 
@@ -231,7 +233,7 @@ def print_object_status(player_position: Location, inhand: Ticket) -> None:
     current ticket with one available at the location.
 
     Args:
-        player_position (Location): The current position of the player as a grid index.
+        player_position (Location): The current position of the player.
         inhand (Ticket): The ticket currently held by the player, he's always holding 
         a tickit but if the `ticket_type = 0`, its equel to the empty hand.
     """
@@ -240,3 +242,95 @@ def print_object_status(player_position: Location, inhand: Ticket) -> None:
     elif (player_position.ticket.ticket_type and inhand.ticket_type):
         print(f"You can switch the: {inhand} with a/an {player_position.ticket}.")
     print(Color.RESET)
+
+def process_input(command: str, inhand: Ticket,
+                  player_position: Location) -> tuple[int, Ticket, Ticket, bool]:
+    """Processes the player's command and updates the game state, including the player's 
+    position and ticket status.
+
+    Args:
+        command (str): The input command from the player, specifying a movement or interaction.
+        inhand (Ticket): The ticket currently held by the player.
+        player_position (Location): The player's current location.
+    
+    Returns:
+        tuple[int, Ticket, Ticket, bool]: A tuple consisting of: \n
+            - int: The player's updated coordinate. \n
+            - Ticket: The ticket placed at the player's location. \n
+            - Ticket: The ticket held by the player after the command is processed. \n
+            - bool: A flag indicating whether a valid move or action occurred (`True`),
+              or if no change took place (`False`).
+    
+    Example:
+        >>> inhand = Ticket(1)
+        >>> player_position = Location("Paddington Station", 1, west=1, up=2, down=3)
+        >>> process_input("P", inhand, player_position)
+        (1, Ticket(0), Ticket(1), True)
+    """
+    match command:
+        case "N":
+            player_position.coordinate = move_player(player_position, "NORTH", inhand)
+
+        case "E":
+            player_position.coordinate = move_player(player_position,"EAST", inhand)
+
+        case "S":
+            player_position.coordinate = move_player(player_position,"SOUTH", inhand)
+
+        case "W":
+            player_position.coordinate = move_player(player_position,"WEST", inhand)
+
+        case "U":
+            player_position.coordinate = move_player(player_position,"UP", inhand)
+
+        case "D":
+            player_position.coordinate = move_player(player_position,"DOWN", inhand)
+
+        case "X":
+            if not inhand.ticket_type:
+                print("Yo have no item in your hand.")
+                return (player_position.coordinate, player_position.ticket, inhand, False)
+            if player_position.ticket.ticket_type:
+                print("There is already a ticket on the ground.")
+                return (player_position.coordinate, player_position.ticket, inhand, False)
+            player_position.ticket, inhand = inhand, player_position.ticket
+            inhand.ticket_type = 0
+
+        case "P":
+            if inhand.ticket_type:
+                print("Yo have already an item in your hand.")
+                return (player_position.coordinate, player_position.ticket, inhand, False)
+            if not player_position.ticket.ticket_type:
+                print("There is no ticket on the ground.")
+                return (player_position.coordinate, player_position.ticket, inhand, False)
+            player_position.ticket, inhand = inhand, player_position.ticket
+
+        case "K":
+            if not player_position.ticket.ticket_type:
+                print("There is no ticket on the ground.")
+                return (player_position.coordinate, player_position.ticket, inhand, False)
+            if not inhand.ticket_type:
+                print("Yo have no item in your hand.")
+                return (player_position.coordinate, player_position.ticket, inhand, False)
+            player_position.ticket, inhand = inhand, player_position.ticket
+
+        case "Q":
+            print()
+            print("Good bye! I hope you had fun playing this game!")
+            print()
+            exit()
+
+        case "H":
+            command_help()
+            return (player_position.coordinate, player_position.ticket, inhand, False)
+
+        case _:
+            print()
+            print()
+            print()
+            print()
+            print(f"""This command is not possible in/on/at {player_position}.
+                  Please try again""")
+            return (player_position.coordinate, player_position.ticket, inhand, False)
+
+    return (player_position.coordinate, player_position.ticket, inhand, True)
