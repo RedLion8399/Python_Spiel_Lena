@@ -42,7 +42,7 @@ class Ticket:
         self.ticket_type: int = ticket_type
         self.left_uses: int = 2
         self.vehicle: str
-        
+
         if self.ticket_type in [1, 3]:
             self.vehicle = "UNDERGROUND"
         elif self.ticket_type in [2, 4]:

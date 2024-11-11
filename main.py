@@ -9,7 +9,7 @@ Variables:
     player_position (int): The current position of the player.
     thief_position (int): The current position of the thief.
     inhand (Ticket): The ticket the player is holding.
-    command (str): The player's input command.
+    command (Command): The player's input command.
     moves (int): Counts the number of moves until the thief moves.
 
 Functions:
@@ -18,9 +18,9 @@ Functions:
 
 __title__ = "Adventure Game"
 __author__ = "Lena Weinstock, Paul Jonas Dohle"
-__version__ = "2.0.0"
+__version__ = "2.0.1"
 __status__ = "Production"
-__date__ = "9.11.2024"
+__date__ = "11.11.2024"
 __all__ = ["main"]
 __path__ = "main.py"
 __coure__ = "Computer Science ICS 3u"
@@ -29,11 +29,11 @@ __teacher__ = "Mr Giassante"
 
 
 from random import randint
-from movement import move_thief
+from movement import Command, move_thief
 from places import locations, FORBIDDEN_PLAYER_STARTS, FORBIDDEN_THIEF_STARTS
 from functions import greeting, command_help, print_moving_opportunitys, print_relative_positions
 from functions import check_winning, print_hand_status, print_positions, print_object_status
-from functions import process_input
+from functions import process_input, get_command
 from ticket import Ticket
 
 
@@ -54,7 +54,7 @@ def main() -> None:
     >>> main()
     """
 
-    command: str = " "      # TODO Design an own dada Type
+    command: Command
     inhand: Ticket = Ticket(0)
     moves: int = 0
     new_move: bool = True  # Decides if stats are shown
@@ -90,7 +90,7 @@ def main() -> None:
         print_object_status(locations[player_position], inhand)
 
         # Asking user to input a command
-        command = input("select a command out of the list above: ").upper()
+        command = get_command()
         print()
 
         player_position, locations[player_position].ticket, inhand, new_move = process_input(

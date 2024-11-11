@@ -14,15 +14,16 @@ Functions:
     process_input: Processes the input of the player.
     print_relative_positions: Prints the relative positions of the player and the thief.
     print_object_status: Prints the status of the ticket.
+    get_command: Asking the player for input and returning the command type.
 """
 __all__ = ["greeting", "command_help", "print_moving_opportunitys", "print_relative_positions",
            "check_winning", "print_hand_status", "print_positions", "print_object_status",
-           "process_input"]
+           "process_input", "get_command"]
 __path__ = "functions.py"
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 from color import Color
-from movement import move_player
+from movement import Command, move_player
 from places import Location, locations
 from ticket import Ticket
 
@@ -250,13 +251,13 @@ def print_object_status(player_position: Location, inhand: Ticket) -> None:
         print(f"You can switch the: {inhand} with a/an {player_position.ticket}.")
     print(Color.RESET)
 
-def process_input(command: str, inhand: Ticket,
+def process_input(command: Command, inhand: Ticket,
                   player_position: Location) -> tuple[int, Ticket, Ticket, bool]:
     """Processes the player's command and updates the game state, including the player's 
     position and ticket status.
 
     Args:
-        command (str): The input command from the player, specifying a movement or interaction.
+        command (Command): The input command from the player, specifying a movement or interaction.
         inhand (Ticket): The ticket currently held by the player.
         player_position (Location): The player's current location.
     
@@ -271,29 +272,15 @@ def process_input(command: str, inhand: Ticket,
     Example:
         >>> inhand = Ticket(1)
         >>> player_position = Location("Paddington Station", 1, west=1, up=2, down=3)
-        >>> process_input("P", inhand, player_position)
+        >>> command = Command.PICK
+        >>> process_input(command, inhand, player_position)
         (1, Ticket(0), Ticket(1), True)
     """
     match command:
-        case "N":
-            player_position.coordinate = move_player(player_position, "NORTH", inhand)
+        case Command.NORTH | Command.SOUTH | Command.EAST | Command.WEST | Command.UP | Command.DOWN:
+            player_position.coordinate = move_player(player_position, command, inhand)
 
-        case "E":
-            player_position.coordinate = move_player(player_position,"EAST", inhand)
-
-        case "S":
-            player_position.coordinate = move_player(player_position,"SOUTH", inhand)
-
-        case "W":
-            player_position.coordinate = move_player(player_position,"WEST", inhand)
-
-        case "U":
-            player_position.coordinate = move_player(player_position,"UP", inhand)
-
-        case "D":
-            player_position.coordinate = move_player(player_position,"DOWN", inhand)
-
-        case "X":
+        case Command.DROP:
             if not inhand.ticket_type:
                 print("Yo have no item in your hand.")
                 return (player_position.coordinate, player_position.ticket, inhand, False)
@@ -303,7 +290,7 @@ def process_input(command: str, inhand: Ticket,
             player_position.ticket, inhand = inhand, player_position.ticket
             inhand.ticket_type = 0
 
-        case "P":
+        case Command.PICK:
             if inhand.ticket_type:
                 print("Yo have already an item in your hand.")
                 return (player_position.coordinate, player_position.ticket, inhand, False)
@@ -312,7 +299,7 @@ def process_input(command: str, inhand: Ticket,
                 return (player_position.coordinate, player_position.ticket, inhand, False)
             player_position.ticket, inhand = inhand, player_position.ticket
 
-        case "K":
+        case Command.SWAP:
             if not player_position.ticket.ticket_type:
                 print("There is no ticket on the ground.")
                 return (player_position.coordinate, player_position.ticket, inhand, False)
@@ -321,23 +308,81 @@ def process_input(command: str, inhand: Ticket,
                 return (player_position.coordinate, player_position.ticket, inhand, False)
             player_position.ticket, inhand = inhand, player_position.ticket
 
-        case "Q":
+        case Command.QUIT:
             print()
             print("Good bye! I hope you had fun playing this game!")
             print()
             exit()
 
-        case "H":
+        case Command.HELP:
             command_help()
             return (player_position.coordinate, player_position.ticket, inhand, False)
 
         case _:
-            print()
-            print()
-            print()
-            print()
-            print(f"""This command is not possible in/on/at {player_position}.
-                  Please try again""")
+            print(f"This command is not available at {player_position}. Please try again.")
             return (player_position.coordinate, player_position.ticket, inhand, False)
 
     return (player_position.coordinate, player_position.ticket, inhand, True)
+
+def get_command() -> Command:
+    """Prompts the player to select a command and returns the corresponding `Command` enum value.
+
+    This function continuously prompts the user to input a command until a valid command is entered.
+    Based on the user's input, it returns a specific `Command` enum value representing
+    a direction (e.g., NORTH, EAST), an action (e.g., PICK, DROP), or a control command 
+    (e.g., HELP, QUIT). If an invalid command is entered, a message indicating that the 
+    command is unavailable is displayed, and the prompt restarts.
+
+    Returns:
+        Command: The enum value corresponding to the entered command.
+
+    Raises:
+        ValueError: If an unknown command value is somehow assigned. This case should not occur
+            under normal use, as only valid commands are accepted.
+
+    Commands:
+        - Movement: "N" (NORTH), "E" (EAST), "S" (SOUTH), "W" (WEST), "U" (UP), "D" (DOWN)
+        - Actions: "X" (DROP), "P" (PICK), "K" (SWAP)
+        - Controls: "Q" (QUIT), "H" (HELP)
+
+    Example:
+        >>> get_command()  # User inputs "N" for NORTH
+        <Command.NORTH: 'N'>
+    """
+
+    while True:
+        input_command = input("Select a command out of the list above: ").upper()
+        if input_command not in ["N", "E", "S", "W", "U", "D", "X", "P", "K", "Q", "H"]:
+            print()
+            print()
+            print()
+            print()
+            print("This is not a valid command. Please try again")
+            continue
+
+        match input_command:
+            case "N":
+                return Command.NORTH
+            case "E":
+                return Command.EAST
+            case "S":
+                return Command.SOUTH
+            case "W":
+                return Command.WEST
+            case "U":
+                return Command.UP
+            case "D":
+                return Command.DOWN
+            case "X":
+                return Command.DROP
+            case "P":
+                return Command.PICK
+            case "K":
+                return Command.SWAP
+            case "Q":
+                return Command.QUIT
+            case "H":
+                return Command.HELP
+            case _:
+                raise ValueError("""A wrong command value was assigned.
+                                 Please report this to the author.""")
