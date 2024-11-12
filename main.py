@@ -16,16 +16,9 @@ Functions:
     main: The main function that initializes and runs the game loop.
 """
 
-__title__ = "Adventure Game"
-__author__ = "Lena Weinstock, Paul Jonas Dohle"
 __version__ = "2.0.1"
-__status__ = "Production"
-__date__ = "11.11.2024"
 __all__ = ["main"]
 __path__ = "main.py"
-__coure__ = "Computer Science ICS 3u"
-__school__ = "Glebe Collegiate Institute, Ottawa; Europagymnaium Warstein"
-__teacher__ = "Mr Giassante"
 
 
 from random import randint

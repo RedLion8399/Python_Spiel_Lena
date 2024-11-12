@@ -111,7 +111,7 @@ locations = [
     Location("Paddington Station", 1, down=71),
     Location("Regent's Park", 2, east=3),
     Location("Regent's Park", 3,  south=13, west=2),
-    Location("Gower Street", 4, south=4, east=5),
+    Location("Gower Street", 4, south=14, east=5),
     Location("Euston Road", 5, east=6, west=4),
     Location("King's Cross Station", 6, west=5, down=72),
     Location("Prime Meridian", 7, east=8),

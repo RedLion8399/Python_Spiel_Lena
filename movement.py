@@ -17,7 +17,7 @@ for the thief. It also provides the `Command` Flag class to standardize movement
         is_boat_possible: Checks if the player has the possibility to move by boat.
 """
 
-__all__ = ["move_player", "is_undergraund_possible", "is_booat_possible", "move_thief", "Command"]
+__all__ = ["move_player", "is_underground_possible", "is_boat_possible", "move_thief", "Command"]
 __path__ = "movement.py"
 __version__ = "1.2.0"
 
@@ -102,8 +102,8 @@ def move_player(player_position: Location, direction: Command, inhand: Ticket) -
             if not player_position.north:
                 print(f"At {player_position} you can not go north.")
                 return player_position.coordinate
-            if not (is_undergraund_possible(player_position.coordinate, inhand) and
-            is_booat_possible(direction, player_position.coordinate, inhand)):
+            if not (is_underground_possible(player_position.coordinate, inhand) and
+            is_boat_possible(direction, player_position.coordinate, inhand)):
                 return player_position.coordinate
             return player_position.north
 
@@ -111,7 +111,7 @@ def move_player(player_position: Location, direction: Command, inhand: Ticket) -
             if not player_position.east:
                 print(f"At {player_position} you can not go east.")
                 return player_position.coordinate
-            if not is_undergraund_possible(player_position.coordinate, inhand):
+            if not is_underground_possible(player_position.coordinate, inhand):
                 return player_position.coordinate
             return player_position.east
 
@@ -119,8 +119,8 @@ def move_player(player_position: Location, direction: Command, inhand: Ticket) -
             if not player_position.south:
                 print(f"At {player_position} you can not go south.")
                 return player_position.coordinate
-            if not (is_undergraund_possible(player_position.coordinate, inhand) and
-            is_booat_possible(direction, player_position.coordinate, inhand)):
+            if not (is_underground_possible(player_position.coordinate, inhand) and
+            is_boat_possible(direction, player_position.coordinate, inhand)):
                 return player_position.coordinate
             return player_position.south
 
@@ -128,7 +128,7 @@ def move_player(player_position: Location, direction: Command, inhand: Ticket) -
             if not player_position.west:
                 print(f"At {player_position} you can not go west.")
                 return player_position.coordinate
-            if not is_undergraund_possible(player_position.coordinate, inhand):
+            if not is_underground_possible(player_position.coordinate, inhand):
                 return player_position.coordinate
             return player_position.west
 
@@ -147,7 +147,7 @@ def move_player(player_position: Location, direction: Command, inhand: Ticket) -
         case _:
             raise ValueError("Input unknown movement direction. Please reoprt this to the author.")
 
-def is_undergraund_possible(player_position: int, inhand: Ticket) -> bool:
+def is_underground_possible(player_position: int, inhand: Ticket) -> bool:
     """Checks if underground travel is possible for the player based on their
     current position, chosen direction, and ticket status.
 
@@ -180,7 +180,7 @@ def is_undergraund_possible(player_position: int, inhand: Ticket) -> bool:
     print("You can not take the underground without a valid ticket.")
     return False
 
-def is_booat_possible(direction:Command, player_position: int, inhand: Ticket) -> bool:
+def is_boat_possible(direction:Command, player_position: int, inhand: Ticket) -> bool:
     """Checks if boat travel is possible for the player based on their
     current position, chosen direction, and ticket status.
 
@@ -235,20 +235,20 @@ def move_thief(thief_position: Location) -> int:
     match randint(1, 5):
         case 1:
             if thief_position.west:
-                thief_position.coordinate -= 1
+                thief_position.coordinate = thief_position.west
         case 2:
             if thief_position.coordinate == 50:
                 thief_position.coordinate = 29
             elif thief_position.north:
-                thief_position.coordinate -= 10
+                thief_position.coordinate = thief_position.north
         case 3:
             if thief_position.coordinate == 29:
                 thief_position.coordinate = 50
             elif thief_position.east:
-                thief_position.coordinate += 1
+                thief_position.coordinate = thief_position.east
         case 4:
             if thief_position.south:
-                thief_position.coordinate += 10
+                thief_position.coordinate = thief_position.south
         case _:
             pass
 
