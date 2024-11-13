@@ -33,4 +33,4 @@ class TestLocation(unittest.TestCase):
 
     def test_repr(self):
         location: Location = Location("Greenwhich Park", 9, south=19, east=10, west=8)
-        self.assertEqual(location, "Greenwhich Park")
+        self.assertEqual(str(location), "Greenwhich Park")
