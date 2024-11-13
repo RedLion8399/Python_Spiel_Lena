@@ -1,4 +1,4 @@
-"""This module contains unit tests for the move_player function in the movement module."""
+"""This module contains unit tests for the movement module."""
 
 import unittest
 from movement import move_player, Command, is_underground_possible, is_boat_possible, move_thief
