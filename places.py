@@ -48,8 +48,13 @@ class Location:
         down (int): The index of the location below this one (undergroundstation). Defaults to 0.
 
     Attributes:
-        ticket (Ticket): A ticket associated with this location.
-    
+        ticket (Ticket): A ticket associated with this location. While innitializing a new location
+        (at the beginning of the game), by chance, there will be either an underground ticket, a boat ticket
+        or no ticket at all. Every case has a specific probability.
+        - 83.3% chance to generate no ticket (ticket type 0).
+        - 16.6% chance to generate an `Underground-ticket` (ticket type 1).
+        - 4.16% chance to generate a `Boat-ticket` (ticket type 2).
+
     Methods:
         __repr__: Returns the location name as a string.
 
