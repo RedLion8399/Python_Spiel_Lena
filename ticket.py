@@ -27,7 +27,10 @@ class Ticket:
         ticket_type (int): The type of ticket (1 for underground, 2 for boat).
 
     Methods:
-        use_ticket(self) -> None: Decreases the remaining uses and updates the ticket status.
+        use_ticket: Decreases the remaining uses and updates the ticket status.
+        set_vehicle: Sets the vehicle associated with the ticket.
+        set_uses: Sets the number of uses for the ticket.
+        __repr__ : Returns a string representation of the current ticket status.
     
     Example:
         >>> ticket = Ticket(1)
@@ -40,16 +43,10 @@ class Ticket:
 
     def __init__(self, ticket_type:int) -> None:
         self.ticket_type: int = ticket_type
-        self.left_uses: int = 2
+        self.left_uses: int
         self.vehicle: str
-
-        if self.ticket_type in [1, 3]:
-            self.vehicle = "UNDERGROUND"
-        elif self.ticket_type in [2, 4]:
-            self.vehicle = "BOAT"
-        else:
-            self.vehicle = ""
-
+        self.set_vehicle()
+        self.set_uses()
 
     def use_ticket(self) -> None:
         """Decreases the remaining uses and updates the ticket status."""
@@ -59,6 +56,24 @@ class Ticket:
         else:
             self.ticket_type = 0
             self.vehicle = ""
+
+    def set_vehicle(self) -> None:
+        """Sets the vehicle associated with the ticket."""
+        if self.ticket_type in [1, 3]:
+            self.vehicle = "UNDERGROUND"
+        elif self.ticket_type in [2, 4]:
+            self.vehicle = "BOAT"
+        else:
+            self.vehicle = ""
+
+    def set_uses(self) -> None:
+        """Sets the number of uses for the ticket."""
+        if self.ticket_type in [1, 2]:
+            self.left_uses = 2
+        elif self.ticket_type in [3, 4]:
+            self.left_uses = 1
+        else:
+            self.left_uses= 0
 
 
     def __repr__(self) -> str:
