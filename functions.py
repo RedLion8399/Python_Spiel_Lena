@@ -262,11 +262,11 @@ def process_input(command: Command, inhand: Ticket,
         player_position (Location): The player's current location.
     
     Returns:
-        tuple[int, Ticket, Ticket, bool]: A tuple consisting of: \n
-            - int: The player's updated coordinate. \n
-            - Ticket: The ticket placed at the player's location. \n
-            - Ticket: The ticket held by the player after the command is processed. \n
-            - bool: A flag indicating whether a valid move or action occurred (`True`),
+        tuple[ int, Ticket, Ticket, bool]: A tuple consisting of:
+        - int: The player's updated coordinate.
+        - Ticket: The ticket placed at the player's location.
+        - Ticket: The ticket held by the player after the command is processed.
+        - bool: A flag indicating whether a valid move or action occurred (`True`),
               or if no change took place (`False`).
     
     Example:
@@ -275,7 +275,7 @@ def process_input(command: Command, inhand: Ticket,
         >>> command = Command.PICK
         >>> process_input(command, inhand, player_position)
         (1, Ticket(0), Ticket(1), True)
-    """
+    """  # ? Maybe the function can manipulate the object values directly instead of returning them.
     match command:
         case Command.NORTH | Command.SOUTH | Command.EAST | Command.WEST | Command.UP | Command.DOWN:
             player_position.coordinate = move_player(player_position, command, inhand)

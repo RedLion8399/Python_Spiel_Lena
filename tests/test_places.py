@@ -1,4 +1,4 @@
-"""This module contains unit tests for the color module."""
+"""This module contains unit tests for the places module."""
 
 import unittest
 from places import Location
