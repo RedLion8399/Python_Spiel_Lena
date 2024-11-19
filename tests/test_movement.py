@@ -1,5 +1,6 @@
 """This module contains unit tests for the movement module."""
 
+from random import randint
 import unittest
 from movement import move_player, Command, is_underground_possible, is_boat_possible, move_thief
 from places import Location
@@ -84,6 +85,27 @@ class TestMovePlayer(unittest.TestCase):
         inhand = Ticket(0)
         with self.assertRaises(ValueError):
             move_player(player_position, "UNKNOWN_DIRECTION", inhand)
+    
+    def test_multiple_moves(self) -> None:
+        player_position: Location = Location("Regent Street", 13, north=3, south=23, west=12)
+        inhand = Ticket(0)
+        for _ in range(1000):
+            match randint(1, 6):
+                case 1:
+                    new_position: int = move_player(player_position, Command.NORTH, inhand)
+                case 2:
+                    new_position: int = move_player(player_position, Command.SOUTH, inhand)
+                case 3:
+                    new_position: int = move_player(player_position, Command.EAST, inhand)
+                case 4:
+                    new_position: int = move_player(player_position, Command.WEST, inhand)
+                case 5:
+                    new_position: int = move_player(player_position, Command.UP, inhand)
+                case 6:
+                    new_position: int = move_player(player_position, Command.DOWN, inhand)
+                case _:
+                    raise ValueError("Unknown move")
+            player_position.coordinate = new_position
 
 class TestCommand(unittest.TestCase):
     """Tests for the Command enum in the movement module."""
